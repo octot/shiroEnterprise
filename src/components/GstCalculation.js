@@ -1,36 +1,97 @@
 import React, { useState, useEffect } from 'react';
-import {Box,Typography, Container,TextField, Grid, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@mui/material';
-function GstCalculation({ total }) {
-  const [cgstRate, setCgstRate] = useState(9); // Default CGST rate
-  const [sgstRate, setSgstRate] = useState(9); // Default SGST rate
-  const [cgstAmount, setCgstAmount] = useState((total * cgstRate) / 100);
-  const [sgstAmount, setSgstAmount] = useState((total * sgstRate) / 100);
-  const [gstType, setGstType] = useState('cgstSgst');
-  const [igstRate, setIgstRate] = useState(0);
-  const [igstAmount, setIgstAmount] = useState(0);
-  const igstTotal = igstAmount;
-  const  cgstSgstTotal = cgstAmount + sgstAmount;
-  const rateTotal = total;
-  const roundedRateTotal = Math.round(rateTotal);
-  const invoiceTotal = gstType === 'cgstSgst' ? roundedRateTotal + cgstSgstTotal : roundedRateTotal + igstTotal;
+import { Box, Typography, Container, TextField, Grid, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@mui/material';
+const GstCalculation = ({ item, index, setItems }) => {
+  const [gstDetails, setGstDetails] = useState({
+    gstType: '',
+    cgstRate: item.cgstRate,
+    sgstRate: item.sgstRate,
+    igstRate: item.igstRate,
+    cgstAmount: 0,
+    sgstAmount: 0,
+    igstAmount: 0,
+    gstTotal:0,
+    rateTotal: item.total,
+    roundedRateTotal: 0,
+    invoiceTotal: 0,
+  });
+  useEffect(() => {
+    calculateGST();
+  }, [item.total, gstDetails.gstType, gstDetails.cgstRate, 
+    gstDetails.sgstRate, gstDetails.igstRate]);
   const handleGstTypeChange = (event) => {
-    setGstType(event.target.value);
+    const { value } = event.target;
+    // Reset relevant fields based on the selected GST type
+    if (value === 'cgstSgst') {
+      setGstDetails((prevDetails) => ({
+        ...prevDetails,
+        gstType: value,
+        igstRate: 0,
+        igstAmount: 0,
+      }));
+    } else if (value === 'igst') {
+      setGstDetails((prevDetails) => ({
+        ...prevDetails,
+        gstType: value,
+        cgstRate: 0,
+        cgstAmount: 0,
+        sgstRate: 0,
+        sgstAmount: 0,
+      }));
+    }
+    updateItemDetails({ gstType: event.target.value });
   };
-  useEffect(() => {
-    // Update CGST amount when total or CGST rate changes
-    setCgstAmount((total * cgstRate) / 100);
-  }, [total, cgstRate]);
-  useEffect(() => {
-    // Update SGST amount when total or SGST rate changes
-    setSgstAmount((total * sgstRate) / 100);
-  }, [total, sgstRate]);
   const handleCgstRateChange = (event) => {
     const rate = parseFloat(event.target.value) || 0;
-    setCgstRate(rate);
+    setGstDetails((prevDetails) => ({
+      ...prevDetails,
+      cgstRate: rate,
+    }));
+    updateItemDetails({ cgstRate: rate });
   };
   const handleSgstRateChange = (event) => {
     const rate = parseFloat(event.target.value) || 0;
-    setSgstRate(rate);
+    setGstDetails((prevDetails) => ({
+      ...prevDetails,
+      sgstRate: rate,
+    }));
+    updateItemDetails({ sgstRate: rate });
+
+  };
+  const handleIgstRateChange = (event) => {
+    const rate = parseFloat(event.target.value) || 0;
+    setGstDetails((prevDetails) => ({
+      ...prevDetails,
+      igstRate: rate,
+    }));
+    updateItemDetails({ igstRate: rate });
+
+  };
+  const updateItemDetails = (details) => {
+    setItems((prevItems) => {
+      const updatedItems = [...prevItems];
+      updatedItems[index] = { ...updatedItems[index], ...details };
+      return updatedItems;
+    });
+  };
+  const calculateGST = () => {
+    let cgstAmount = (item.total * gstDetails.cgstRate) / 100;
+    let sgstAmount = (item.total * gstDetails.sgstRate) / 100;
+    let igstAmount = (item.total * gstDetails.igstRate) / 100;
+    let rateTotal = item.total;
+    let roundedRateTotal = Math.round(rateTotal);
+    let gstTotal = gstDetails.gstType === 'cgstSgst' ? cgstAmount + sgstAmount : igstAmount;
+    console.log("gstTotal ",gstTotal)
+    let invoiceTotal = roundedRateTotal + gstTotal;
+    setGstDetails((prevDetails) => ({
+      ...prevDetails,
+      cgstAmount,
+      sgstAmount,
+      igstAmount,
+      rateTotal,
+      roundedRateTotal,
+      gstTotal,
+      invoiceTotal,
+    }));
   };
   return (
     <Container>
@@ -40,20 +101,20 @@ function GstCalculation({ total }) {
       <Grid item xs={12}>
         <FormControl component="fieldset">
           <FormLabel component="legend">GST Type</FormLabel>
-          <RadioGroup row value={gstType} onChange={handleGstTypeChange}>
+          <RadioGroup  onChange={handleGstTypeChange}>
             <FormControlLabel value="cgstSgst" control={<Radio />} label="CGST & SGST" />
             <FormControlLabel value="igst" control={<Radio />} label="IGST" />
           </RadioGroup>
         </FormControl>
       </Grid>
-      {gstType === 'cgstSgst' ? (
+      {gstDetails.gstType === 'cgstSgst' ? (
         <>
           <Box sx={{ mt: 2 }}>
             <TextField
               id="cgstRate"
               label="CGST Rate (%)"
               type="number"
-              value={cgstRate}
+              value={gstDetails.cgstRate}
               onChange={handleCgstRateChange}
               fullWidth
               variant="outlined"
@@ -62,7 +123,7 @@ function GstCalculation({ total }) {
             <TextField
               id="cgstAmount"
               label="CGST Amount"
-              value={cgstAmount.toFixed(2)}
+              value={gstDetails.cgstAmount.toFixed(2)}
               InputProps={{
                 readOnly: true,
               }}
@@ -74,7 +135,7 @@ function GstCalculation({ total }) {
               id="sgstRate"
               label="SGST Rate (%)"
               type="number"
-              value={sgstRate}
+              value={gstDetails.sgstRate}
               onChange={handleSgstRateChange}
               fullWidth
               variant="outlined"
@@ -83,7 +144,7 @@ function GstCalculation({ total }) {
             <TextField
               id="sgstAmount"
               label="SGST Amount"
-              value={sgstAmount.toFixed(2)}
+              value={gstDetails.sgstAmount.toFixed(2)}
               InputProps={{
                 readOnly: true,
               }}
@@ -93,7 +154,7 @@ function GstCalculation({ total }) {
             />
             <TextField
               label="GST Total"
-              value={cgstSgstTotal.toFixed(2)}
+              value={gstDetails.gstTotal.toFixed(2)}
               InputProps={{
                 readOnly: true,
               }}
@@ -103,7 +164,7 @@ function GstCalculation({ total }) {
             />
             <TextField
               label="Rate Total"
-              value={rateTotal.toFixed(2)}
+              value={gstDetails.rateTotal.toFixed(2)}
               InputProps={{
                 readOnly: true,
               }}
@@ -111,7 +172,7 @@ function GstCalculation({ total }) {
             />
             <TextField
               label="Round Off"
-              value={roundedRateTotal.toFixed(2)}
+              value={gstDetails.roundedRateTotal.toFixed(2)}
               InputProps={{
                 readOnly: true,
               }}
@@ -121,7 +182,7 @@ function GstCalculation({ total }) {
             />
             <TextField
               label="Invoice Total INR"
-              value={invoiceTotal.toFixed(2)}
+              value={gstDetails.invoiceTotal.toFixed(2)}
               InputProps={{
                 readOnly: true,
               }}
@@ -137,58 +198,70 @@ function GstCalculation({ total }) {
             <TextField
               label="IGST Rate"
               type="number"
-              value={igstRate}
-              onChange={(e) => setIgstRate(parseFloat(e.target.value))}
+              value={gstDetails.igstRate}
+              onChange={handleIgstRateChange}
               fullWidth
+              variant="outlined"
+              margin="normal"
             />
           </Grid>
           <Grid item xs={6}>
             <TextField
               label="IGST Amount"
               type="number"
-              value={igstAmount}
-              onChange={(e) => setIgstAmount(parseFloat(e.target.value))}
+              value={gstDetails.igstAmount}
+              onChange={handleIgstRateChange}
               fullWidth
+              variant="outlined"
+              margin="normal"
             />
           </Grid>
           <Grid item xs={6}>
             <TextField
               label="GST Total"
-              value={igstTotal.toFixed(2)}
+              value={gstDetails.gstTotal.toFixed(2)}
               InputProps={{
                 readOnly: true,
               }}
               fullWidth
+              variant="outlined"
+              margin="normal"
             />
           </Grid>
           <Grid item xs={6}>
             <TextField
               label="Rate Total"
-              value={rateTotal.toFixed(2)}
+              value={gstDetails.rateTotal.toFixed(2)}
               InputProps={{
                 readOnly: true,
               }}
               fullWidth
+              variant="outlined"
+              margin="normal"
             />
           </Grid>
           <Grid item xs={6}>
             <TextField
               label="Round Off"
-              value={roundedRateTotal.toFixed(2)}
+              value={gstDetails.roundedRateTotal.toFixed(2)}
               InputProps={{
                 readOnly: true,
               }}
               fullWidth
+              variant="outlined"
+              margin="normal"
             />
           </Grid>
           <Grid item xs={6}>
             <TextField
               label="Invoice Total"
-              value={invoiceTotal.toFixed(2)}
+              value={gstDetails.invoiceTotal.toFixed(2)}
               InputProps={{
                 readOnly: true,
               }}
               fullWidth
+              variant="outlined"
+              margin="normal"
             />
           </Grid>
         </>

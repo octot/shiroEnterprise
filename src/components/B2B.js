@@ -3,12 +3,10 @@ import { Typography, Container, TextField, Button, Box, Autocomplete } from '@mu
 import { format } from 'date-fns';
 import axios from 'axios';
 import ItemsTable from './ItemsTable';
-import GstCalculation from './GstCalculation.js'
 function B2B() {
   const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
   const [customers, setCustomers] = useState([]);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
-  const [total,setTotal] = useState(0);
   const [customerDetails, setCustomerDetails] = useState({
     customerName: '',
     address: '',
@@ -53,10 +51,42 @@ function B2B() {
       ...customerDetails,
     });
   };
+  //shipment functions
+  const [shipmentDetails, setShipmentDetails] = useState({
+    customerName: '',
+    address: '',
+    customerGst: '',
+    phoneNumber: '',
+    date: '',
+  });
+  const handleInputChange = (field, value) => {
+    setShipmentDetails((prevDetails) => ({
+      ...prevDetails,
+      [field]: value,
+    }));
+  };
+  const handleCopyValues = () => {
+    setShipmentDetails({
+      customerName: customerDetails.customerName,
+      address: customerDetails.address,
+      customerGst: customerDetails.customerGst,
+      phoneNumber: customerDetails.phoneNumber,
+      date: date,
+    });
+  };
+  const handleClearValues = () => {
+    setShipmentDetails({
+      customerName: '',
+      address: '',
+      customerGst: '',
+      phoneNumber: '',
+      date: '',
+    });
+  };
   return (
     <Container>
       <Typography variant="h4" component="h2" gutterBottom>
-        B2B Component
+        Customer Details
       </Typography>
       <Box component="form" sx={{ mt: 3 }} noValidate autoComplete="off">
         <Autocomplete
@@ -113,8 +143,6 @@ function B2B() {
           fullWidth
           margin="normal"
         />
-        <ItemsTable setTotal={setTotal} />
-        <GstCalculation total={total} />
         <Button
           variant="contained"
           color="primary"
@@ -124,6 +152,68 @@ function B2B() {
           Save
         </Button>
       </Box>
+      <Box component="form" sx={{ mt: 3 }} noValidate autoComplete="off">
+        <Button variant="contained" onClick={handleCopyValues}
+          sx={{ mt: 2, mr: 2, backgroundColor: 'blue', '&:hover': { backgroundColor: 'darkblue' } }}
+        >
+          Copy Default Values
+        </Button>
+        <Button variant="contained" onClick={handleClearValues}
+          sx={{ mt: 2, backgroundColor: 'red', '&:hover': { backgroundColor: 'darkred' } }}
+        >Clear Shipment Details</Button>
+        <Typography variant="h4" component="h2" gutterBottom>
+          Shipment Details
+        </Typography>
+        <TextField
+          id="customerName"
+          label="Customer Name"
+          variant="outlined"
+          value={shipmentDetails.customerName}
+          onChange={(e) => handleInputChange('customerName', e.target.value)}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          id="address"
+          label="Address"
+          variant="outlined"
+          value={shipmentDetails.address}
+          onChange={(e) => handleInputChange('address', e.target.value)}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          id="customerGst"
+          label="Customer GST"
+          variant="outlined"
+          value={shipmentDetails.customerGst}
+          onChange={(e) => handleInputChange('customerGst', e.target.value)}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          id="phoneNumber"
+          label="Phone Number"
+          variant="outlined"
+          value={shipmentDetails.phoneNumber}
+          onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          id="date"
+          label="Date"
+          type="date"
+          value={shipmentDetails.date}
+          onChange={(e) => handleInputChange('date', e.target.value)}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          fullWidth
+          margin="normal"
+        />
+      </Box>
+      <ItemsTable customerDetails={customerDetails} date={date} shipmentDetails={shipmentDetails}/>
     </Container>
   );
 }

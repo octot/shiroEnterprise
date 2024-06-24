@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { TextField, Button, Container, Typography, Box } from '@mui/material';
-
 function CustomerForm() {
   const [formData, setFormData] = useState({
     name: '',
@@ -26,14 +25,19 @@ function CustomerForm() {
     });
 
     if (response.ok) {
-        alert('Customer data saved')
+      alert('Customer data saved')
       console.log('Customer data saved');
     } else {
-        alert('Error saving customer data')
+      alert('Error saving customer data')
       console.log('Error saving customer data');
     }
+    setFormData({
+      name: '',
+      address: '',
+      customerGst: '',
+      phoneNumber: ''
+    });
   };
-
   return (
     <Container maxWidth="sm">
       <Typography variant="h4" component="h1" gutterBottom>
