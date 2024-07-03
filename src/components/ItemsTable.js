@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import {
   Typography, Container, TextField, Button, Box, Grid,
-  FormControl, FormLabel, RadioGroup, FormControlLabel, Radio
+  FormControl,  RadioGroup, FormControlLabel, Radio
 } from '@mui/material';
-import GstCalculation from './GstCalculation'
-import ItemDetailsTable from './ItemDetailsTable'
 import PdfReportData from './pdfReportData'
 const ItemsTable = ({ customerDetails, date, shipmentDetails }) => {
   const [items, setItems] = useState([
@@ -36,14 +34,14 @@ const ItemsTable = ({ customerDetails, date, shipmentDetails }) => {
       updatedItems[index].total = qty * rate;
       console.log("gstType ",gstType)
       console.log("gstType ",updatedItems[index].cgstRate)
-      if(gstType=="cgst_sgst")
+      if(gstType==="cgst_sgst")
       {
         updatedItems[index].igstRate=0;
         updatedItems[index].igstAmount=0
         updatedItems[index].cgstAmount = (updatedItems[index].total * updatedItems[index].cgstRate) / 100;
         updatedItems[index].sgstAmount = (updatedItems[index].total * updatedItems[index].sgstRate) / 100;
       }
-      if(gstType=="igst")
+      if(gstType==="igst")
       {
         updatedItems[index].cgstRate=0;
         updatedItems[index].sgstRate=0;
@@ -88,11 +86,11 @@ const ItemsTable = ({ customerDetails, date, shipmentDetails }) => {
     let gstTotal = {}
     let [cgstTotal, sgstTotal, igstTotal, rateTotal, gstTotalSum, roundOff, invoiceTotalInr] = [0, 0, 0, 0, 0, 0, 0];
     for (let i = 0; i < items.length; i++) {
-      if (gstType == 'cgst_sgst') {
+      if (gstType === 'cgst_sgst') {
         cgstTotal += items[i].cgstAmount;
         sgstTotal += items[i].sgstAmount;
       }
-      if (gstType == 'igst'){
+      if (gstType === 'igst'){
         igstTotal += items[i].igstAmount;
       }
       rateTotal += items[i].total;
@@ -392,10 +390,6 @@ const ItemsTable = ({ customerDetails, date, shipmentDetails }) => {
       >
         Add Row
       </Button>
-      <div>
-        <h1>Item Details</h1>
-        <ItemDetailsTable items={items} />
-      </div>
       <div>
         <PdfReportData items={items} customerDetails={customerDetails}
           date={date} shipmentDetails={shipmentDetails}

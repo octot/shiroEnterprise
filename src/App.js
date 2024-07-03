@@ -4,7 +4,6 @@ import ExistingCustomerDetails from './components/ExistingCustomerDetails';
 import React, { useState } from 'react';
 import { Container, Box, Button, Card, CardContent, Typography } from '@mui/material';
 import B2B from './components/B2B';
-import B2C from './components/B2C';
 function App() {
   const [view, setView] = useState('menu');
 
@@ -46,14 +45,6 @@ function App() {
                 >
                   B2B
                 </Button>
-                <Button
-                  variant="contained"
-                  color="info"
-                  onClick={() => handleViewChange('b2c')}
-                  sx={{ m: 1 }}
-                >
-                  B2C
-                </Button>
               </Box>
             </CardContent>
           </Card>
@@ -81,14 +72,6 @@ function App() {
             Back
           </Button>
           <B2B />
-        </Box>
-      )}
-      {view === 'b2c' && (
-        <Box>
-          <Button variant="contained" onClick={() => handleViewChange('menu')} sx={{ mb: 2 }}>
-            Back
-          </Button>
-          <B2C />
         </Box>
       )}
     </Container>
