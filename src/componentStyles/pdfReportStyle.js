@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#000',
         marginLeft: 30,
-        marginTop: 50
+        marginTop: 20
     },
     column: {
         flex: 1,
@@ -186,5 +186,16 @@ const styles = StyleSheet.create({
         height: 98,
         marginTop: -10
     },
+    billNoContainer:{
+        display:'flex',
+        alignItems:'flex-start',
+        justifyContent:'center',
+        border:'1px solid black',
+        height:'30',
+        width:'90%',
+        marginTop:'30',
+        marginLeft:'30',
+        fontSize: 13,
+    }
 });
 export default styles;

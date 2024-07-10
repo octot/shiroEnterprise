@@ -1,11 +1,11 @@
 import React from 'react';
-import { Image, StyleSheet, PDFViewer, Document, Page, Text, View } from '@react-pdf/renderer';
+import { Image,  PDFViewer, Document, Page, Text, View } from '@react-pdf/renderer';
 import logoheader from '../images/logoheader.jpg'
 import paymentDetails from '../images/paymentDetails.jpg'
 import termsOfSale from '../images/termsOfSale.jpg'
 import styles from '../componentStyles/pdfReportStyle'
 const PdfReportData = ({ items, customerDetails, date,
-  shipmentDetails, gstTotalValues }) => {
+  shipmentDetails, gstTotalValues, billNo }) => {
   console.log("items from pdf ", items)
   function itemsToParts(items, itemSize) {
     let itemsTotalArray = []
@@ -27,6 +27,11 @@ const PdfReportData = ({ items, customerDetails, date,
               <View style={styles.pageStyle}>
                 <View style={styles.logoheaderContainer}>
                   <Image src={logoheader} style={styles.logoheader} />
+                </View>
+                <View>
+                  <View style={styles.billNoContainer}>
+                    <Text>BillNo: {billNo}</Text>
+                  </View>
                 </View>
                 <View style={styles.customerAndShipmentDetails}>
                   <View style={styles.column}>

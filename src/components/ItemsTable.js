@@ -114,6 +114,19 @@ const ItemsTable = ({ customerDetails, date, shipmentDetails }) => {
     };
     return gstTotal;
   }
+  const [billNo, setBillNo] = useState('');
+  const generateBillNo = () => {
+    const alphaNumbericals = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let billNumber = '';
+    for (let i = 0; i < 4; ++i) {
+      billNumber += alphaNumbericals.charAt(Math.floor(Math.random() * alphaNumbericals.length));
+    }
+    return billNumber
+  }
+  useEffect(() => {
+    const newBillNo = generateBillNo();
+    setBillNo(newBillNo);
+  }, []);
   return (
     <Container>
       <Typography variant="h4" component="h2" gutterBottom>
@@ -251,9 +264,6 @@ const ItemsTable = ({ customerDetails, date, shipmentDetails }) => {
                     margin="normal"
                   />
                 </Grid>
-                {/*
-            <GstCalculation item={item} index={index} setItems={setItems} />
-            */}
                 <Grid item xs={12} sm={1} display="flex" alignItems="center">
                   <Button
                     variant="contained"
@@ -367,16 +377,7 @@ const ItemsTable = ({ customerDetails, date, shipmentDetails }) => {
                 {/*
             <GstCalculation item={item} index={index} setItems={setItems} />
             */}
-                <Grid item xs={12} sm={1} display="flex" alignItems="center">
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => handleRemoveRow(index)}
-                    sx={{ mt: 2 }}
-                  >
-                    Remove
-                  </Button>
-                </Grid>
+
               </Grid>
             </Box>
           ))}
@@ -393,7 +394,7 @@ const ItemsTable = ({ customerDetails, date, shipmentDetails }) => {
       <div>
         <PdfReportData items={items} customerDetails={customerDetails}
           date={date} shipmentDetails={shipmentDetails}
-          gstTotalValues={gstTotalValues} />
+          gstTotalValues={gstTotalValues} billNo={billNo}/>
       </div>
     </Container>
   );

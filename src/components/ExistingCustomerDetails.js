@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Container, Typography, Button, TextField, Box } from '@mui/material';
+import { createTheme, ThemeProvider, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Container, Typography, Button, TextField, Box } from '@mui/material';
+import './TableStyles.css';
 function ExistingCustomerDetails() {
   const [customers, setCustomers] = useState([]);
   const [editId, setEditId] = useState(null);
@@ -27,7 +28,6 @@ function ExistingCustomerDetails() {
       phoneNumber: customer.phoneNumber
     });
   };
-
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     setEditFormData({
@@ -35,7 +35,6 @@ function ExistingCustomerDetails() {
       [name]: value
     });
   };
-
   const handleSaveClick = async (id) => {
     const response = await fetch(`http://localhost:3001/api/editExistingCustomerDetails/${id}`, {
       method: 'PUT',
@@ -69,44 +68,62 @@ function ExistingCustomerDetails() {
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
   };
-
   const filteredCustomers = customers.filter((customer) =>
-  customer.name.toLowerCase().includes(search.toLowerCase())
-);
+    customer.name.toLowerCase().includes(search.toLowerCase())
+  );
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#1976d2',
+      },
+      secondary: {
+        main: '#dc004e',
+      },
+    },
+  });
   return (
-    <Container>
-      <Typography variant="h4" component="h2" gutterBottom>
+    <ThemeProvider theme={theme}>
+      <Typography variant="h4" component="h2" gutterBottom display={'flex'} justifyContent={'center'}>
         Existing Customers
       </Typography>
-      <TableContainer component={Paper}>
-        <Table>
+      <Container component={Paper} sx={{ mt: 4, p: 2 }}>
+        <Table className="custom-table">
           <TableHead>
-            <TableRow>
-            <TableCell>
-                <Box display="flex" alignItems="center">
-                  Name
+            <TableRow className="custom-table-head">
+              <TableCell className="custom-table-cell">
+                <Box display="flex" flexDirection="column" alignItems="center">
+                  <Typography variant="h7">Name</Typography>
                   <TextField
                     value={search}
                     onChange={handleSearchChange}
                     placeholder="Search by name"
                     size="small"
                     variant="outlined"
-                    sx={{ marginLeft: 2 }}
+                    sx={{
+                      m: 1,
+                      width: '100%', // Ensure the TextField takes up full width of its container
+                      '& .MuiOutlinedInput-root': {
+                        backgroundColor: 'common.white',
+                        '&:hover': {
+                          backgroundColor: 'grey.100',
+                        },
+                      }
+                    }}
                   />
                 </Box>
               </TableCell>
-              <TableCell>Address</TableCell>
-              <TableCell>Customer GST</TableCell>
-              <TableCell>Phone Number</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell className="custom-table-cell">Address</TableCell>
+              <TableCell className="custom-table-cell">Customer GST</TableCell>
+              <TableCell className="custom-table-cell">Phone Number</TableCell>
+              <TableCell className="custom-table-cell">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {filteredCustomers.map((customer) => (
-              <TableRow key={customer._id}>
+              <TableRow key={customer._id} className="custom-table-row">
                 {editId === customer._id ? (
                   <>
-                    <TableCell>
+                    <TableCell className="custom-table-cell">
                       <TextField
                         fullWidth
                         name="name"
@@ -114,7 +131,7 @@ function ExistingCustomerDetails() {
                         onChange={handleEditChange}
                       />
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="custom-table-cell">
                       <TextField
                         fullWidth
                         name="address"
@@ -122,7 +139,7 @@ function ExistingCustomerDetails() {
                         onChange={handleEditChange}
                       />
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="custom-table-cell">
                       <TextField
                         fullWidth
                         name="customerGst"
@@ -130,7 +147,7 @@ function ExistingCustomerDetails() {
                         onChange={handleEditChange}
                       />
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="custom-table-cell">
                       <TextField
                         fullWidth
                         name="phoneNumber"
@@ -138,7 +155,7 @@ function ExistingCustomerDetails() {
                         onChange={handleEditChange}
                       />
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="custom-table-cell">
                       <Button
                         variant="contained"
                         color="primary"
@@ -150,17 +167,20 @@ function ExistingCustomerDetails() {
                   </>
                 ) : (
                   <>
-                    <TableCell>{customer.name}</TableCell>
-                    <TableCell>{customer.address}</TableCell>
-                    <TableCell>{customer.customerGst}</TableCell>
-                    <TableCell>{customer.phoneNumber}</TableCell>
-                    <TableCell>
+                    <TableCell className="custom-table-cell">{customer.name}</TableCell>
+                    <TableCell className="custom-table-cell">{customer.address}</TableCell>
+                    <TableCell className="custom-table-cell">{customer.customerGst}</TableCell>
+                    <TableCell className="custom-table-cell">{customer.phoneNumber}</TableCell>
+                    <TableCell className="custom-table-cell">
                       <Box display="flex" justifyContent="space-between" flexWrap="wrap">
                         <Button
                           variant="contained"
                           color="primary"
                           onClick={() => handleEditClick(customer)}
-                          sx={{ m: 0.5 }}
+                          sx={{
+                            m: 0.5,
+                            width: '82px'
+                          }}
                         >
                           Edit
                         </Button>
@@ -168,7 +188,9 @@ function ExistingCustomerDetails() {
                           variant="contained"
                           color="secondary"
                           onClick={() => handleDeleteClick(customer._id)}
-                          sx={{ m: 0.5 }}                        >
+                          sx={{
+                            m: .5
+                          }}>
                           Delete
                         </Button>
                       </Box>
@@ -179,8 +201,8 @@ function ExistingCustomerDetails() {
             ))}
           </TableBody>
         </Table>
-      </TableContainer>
-    </Container>
+      </Container>
+    </ThemeProvider>
   );
 }
 

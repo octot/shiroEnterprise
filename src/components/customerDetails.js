@@ -1,6 +1,20 @@
 import React, { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { TextField, Button, Container, Typography, Box } from '@mui/material';
-function CustomerForm() {
+import { styled } from '@mui/system';
+const ResponsiveTextField = styled(TextField)(({ theme }) => ({
+  width: '100%',
+  '@media (min-width: 600px)': {
+    // backgroundColor:'blue',
+    width: '70%',
+  },
+  '@media (min-width: 960px)': {
+    // backgroundColor:'red',
+    width: '100%',
+  },
+}));
+const CustomerForm = () => {
   const [formData, setFormData] = useState({
     name: '',
     address: '',
@@ -25,10 +39,10 @@ function CustomerForm() {
     });
 
     if (response.ok) {
-      alert('Customer data saved')
+      toast.success('Customer data saved');
       console.log('Customer data saved');
     } else {
-      alert('Error saving customer data')
+      toast.error('Error saving customer data');
       console.log('Error saving customer data');
     }
     setFormData({
@@ -38,54 +52,41 @@ function CustomerForm() {
       phoneNumber: ''
     });
   };
+  const customerAttributes = ['name', 'address', 'customerGst', 'phoneNumber']
   return (
-    <Container maxWidth="sm">
-      <Typography variant="h4" component="h1" gutterBottom>
-        Customer Form
-      </Typography>
-      <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
-        <TextField
-          fullWidth
-          label="Name"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-          margin="normal"
-        />
-        <TextField
-          fullWidth
-          label="Address"
-          name="address"
-          value={formData.address}
-          onChange={handleChange}
-          required
-          margin="normal"
-        />
-        <TextField
-          fullWidth
-          label="Customer GST"
-          name="customerGst"
-          value={formData.customerGst}
-          onChange={handleChange}
-          required
-          margin="normal"
-        />
-        <TextField
-          fullWidth
-          label="Phone Number"
-          name="phoneNumber"
-          value={formData.phoneNumber}
-          onChange={handleChange}
-          required
-          margin="normal"
-        />
-        <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
+    <Container maxWidth="sm" >
+      <Box component="form" onSubmit={handleSubmit} sx={{
+        mt: 2,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+      }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Customer Creation
+        </Typography>
+        {customerAttributes.map((field) => (
+          <ResponsiveTextField
+            key={field}
+            fullWidth
+            label={field.charAt(0).toUpperCase() + field.slice(1)}
+            name={field}
+            value={formData[field]}
+            onChange={handleChange}
+            required
+            margin="normal"
+          />
+        ))}
+        <Button type="submit" variant="contained" color="primary" sx={{
+          mt: 2,
+          display: 'flex',
+          justifyContent: 'center', alignItems: 'center'
+        }}>
           Submit
         </Button>
+        <ToastContainer />
       </Box>
     </Container>
   );
 }
-
 export default CustomerForm;

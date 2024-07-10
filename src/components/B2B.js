@@ -3,6 +3,7 @@ import { Typography, Container, TextField, Button, Box, Autocomplete } from '@mu
 import { format } from 'date-fns';
 import axios from 'axios';
 import ItemsTable from './ItemsTable';
+import { styled } from '@mui/system';
 function B2B() {
   const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
   const [customers, setCustomers] = useState([]);
@@ -76,16 +77,25 @@ function B2B() {
   };
   const handleClearValues = () => {
     setShipmentDetails({
-      customerName: '',
-      address: '',
-      customerGst: '',
-      phoneNumber: '',
-      date: '',
+      customerName: '', address: '', customerGst: '', phoneNumber: '', date: '',
     });
   };
+  const ResponsiveTextField = styled(TextField)(({ theme }) => ({
+    width: '100%',
+    '@media (min-width: 600px)': {
+      // backgroundColor:'blue',
+      width: '70%',
+    },
+    '@media (min-width: 960px)': {
+      // backgroundColor:'red',
+      width: '100%',
+    },
+  }));
+  const customerAndShipmentDetailsInputs = [{ name: 'customerName' }, { name: 'address' }, { name: 'customerGst' }, { name: 'phoneNumber' }, { name: 'date' }
+  ]
   return (
     <Container>
-      <Typography variant="h4" component="h2" gutterBottom>
+      <Typography textAlign={'center'} variant="h4" component="h2" gutterBottom>
         Customer Details
       </Typography>
       <Box component="form" sx={{ mt: 3 }} noValidate autoComplete="off">
@@ -98,51 +108,32 @@ function B2B() {
             <TextField
               {...params}
               label="Customer Name"
-              variant="outlined"
+              variant="filled"
               margin="normal"
+              color="success"
               fullWidth
             />
           )}
         />
-        <TextField
-          id="address"
-          label="Address"
-          variant="outlined"
-          value={customerDetails.address}
-          onChange={(e) => setCustomerDetails({ ...customerDetails, address: e.target.value })}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          id="customerGst"
-          label="Customer GST"
-          variant="outlined"
-          value={customerDetails.customerGst}
-          onChange={(e) => setCustomerDetails({ ...customerDetails, customerGst: e.target.value })}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          id="phoneNumber"
-          label="Phone Number"
-          variant="outlined"
-          value={customerDetails.phoneNumber}
-          onChange={(e) => setCustomerDetails({ ...customerDetails, phoneNumber: e.target.value })}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          id="date"
-          label="Date"
-          type="date"
-          value={date}
-          onChange={handleDateChange}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          fullWidth
-          margin="normal"
-        />
+        {customerAndShipmentDetailsInputs
+          .filter(({ name }) => name != 'customerName')
+          .map(({ name }) => (
+            <ResponsiveTextField
+              key={name}
+              variant="standard"
+              fullWidth
+              label={name.charAt(0).toUpperCase() + name.slice(1)}
+              name={name}
+              value={name === 'date' ? date : customerDetails[name]}
+              onChange={name === 'date' ? handleDateChange : (e) => setCustomerDetails({ ...customerDetails, name: e.target.value })
+              }
+              required
+              margin="normal"
+              type={name === 'date' ? 'date' : 'string'}
+            />
+          )
+          )
+        }
         <Button
           variant="contained"
           color="primary"
@@ -154,20 +145,41 @@ function B2B() {
       </Box>
       <Box component="form" sx={{ mt: 3 }} noValidate autoComplete="off">
         <Button variant="contained" onClick={handleCopyValues}
-          sx={{ mt: 2, mr: 2, backgroundColor: 'blue', '&:hover': { backgroundColor: 'darkblue' } }}
+          sx={{ mt: 1, mr: 2, backgroundColor: 'blue', '&:hover': { backgroundColor: 'darkblue' } }}
         >
           Copy Default Values
         </Button>
         <Button variant="contained" onClick={handleClearValues}
-          sx={{ mt: 2, backgroundColor: 'red', '&:hover': { backgroundColor: 'darkred' } }}
+          sx={{ mt: 1, backgroundColor: 'red', '&:hover': { backgroundColor: 'darkred' } }}
         >Clear Shipment Details</Button>
-        <Typography variant="h4" component="h2" gutterBottom>
+        <Typography sx={{ mt: 3, }}
+          textAlign="center" variant="h4" component="h2" gutterBottom>
           Shipment Details
         </Typography>
-        <TextField
+        {customerAndShipmentDetailsInputs
+          .map(({ name }) => (
+            <ResponsiveTextField
+              key={name}
+              variant="standard"
+              fullWidth
+              label={name.charAt(0).toUpperCase() + name.slice(1)}
+              name={name}
+              value={name === 'date' ? date : shipmentDetails[name]}
+              onChange={name === 'date' ? (e) => handleInputChange('date', e.target.value)
+                : (e) => handleInputChange(name, e.target.value)
+              }
+              required
+              margin="normal"
+              type={name === 'date' ? 'date' : 'string'}
+            />
+          )
+          )
+        }
+
+        {/* <TextField
           id="customerName"
           label="Customer Name"
-          variant="outlined"
+          variant="filled"
           value={shipmentDetails.customerName}
           onChange={(e) => handleInputChange('customerName', e.target.value)}
           fullWidth
@@ -176,7 +188,7 @@ function B2B() {
         <TextField
           id="address"
           label="Address"
-          variant="outlined"
+          variant="standard"
           value={shipmentDetails.address}
           onChange={(e) => handleInputChange('address', e.target.value)}
           fullWidth
@@ -185,7 +197,7 @@ function B2B() {
         <TextField
           id="customerGst"
           label="Customer GST"
-          variant="outlined"
+          variant="standard"
           value={shipmentDetails.customerGst}
           onChange={(e) => handleInputChange('customerGst', e.target.value)}
           fullWidth
@@ -194,13 +206,14 @@ function B2B() {
         <TextField
           id="phoneNumber"
           label="Phone Number"
-          variant="outlined"
+          variant="standard"
           value={shipmentDetails.phoneNumber}
           onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
           fullWidth
           margin="normal"
         />
         <TextField
+          variant="standard"
           id="date"
           label="Date"
           type="date"
@@ -211,9 +224,9 @@ function B2B() {
           }}
           fullWidth
           margin="normal"
-        />
+        /> */}
       </Box>
-      <ItemsTable customerDetails={customerDetails} date={date} shipmentDetails={shipmentDetails}/>
+      <ItemsTable customerDetails={customerDetails} date={date} shipmentDetails={shipmentDetails} />
     </Container>
   );
 }
