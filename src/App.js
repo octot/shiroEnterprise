@@ -11,6 +11,7 @@ function App() {
     setView(newView);
   };
 
+
   return (
     <Container>
       {view === 'menu' && (

@@ -128,10 +128,6 @@ const ItemsTable = ({ customerDetails, date, shipmentDetails }) => {
   }, []);
   return (
     <Container>
-      <Typography variant="h4" component="h2" gutterBottom>
-        Items Table
-      </Typography>
-      <Typography variant="h4" gutterBottom>Select GST Type</Typography>
       <FormControl component="fieldset">
         <RadioGroup
           aria-label="gst-type"

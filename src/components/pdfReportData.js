@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image,  PDFViewer, Document, Page, Text, View } from '@react-pdf/renderer';
+import { Image, PDFViewer, Document, Page, Text, View } from '@react-pdf/renderer';
 import logoheader from '../images/logoheader.jpg'
 import paymentDetails from '../images/paymentDetails.jpg'
 import termsOfSale from '../images/termsOfSale.jpg'
@@ -17,6 +17,41 @@ const PdfReportData = ({ items, customerDetails, date,
   }
   const itemsInPiecesList = itemsToParts(items, 10)
   console.log("itemsInPieces ", itemsInPiecesList)
+  const customerInfo = [
+    { label: 'Customer Name', value: customerDetails.customerName },
+    { label: 'Address', value: customerDetails.address },
+    { label: 'Customer GST', value: customerDetails.customerGst },
+    { label: 'Phone Number', value: customerDetails.phoneNumber },
+    { label: 'Date', value: date }
+  ];
+  const shipmentInfo = [
+    { label: 'Customer Name', value: shipmentDetails.customerName },
+    { label: 'Address', value: shipmentDetails.address },
+    { label: 'Customer GST', value: shipmentDetails.customerGst },
+    { label: 'Phone Number', value: shipmentDetails.phoneNumber },
+    { label: 'Date', value: date }
+  ];
+  const gstList = ['CGST', 'SGST', 'IGST'];
+  const gstTotalList = ['cgstTotal', 'sgstTotal', 'igstTotal'];
+  const gstTotalFInalListMap = [
+    {
+      columnName: 'GST TOTAL', columnValue: 'gstTotalSum'
+    },
+    {
+      columnName: 'RATE TOTAL', columnValue: 'rateTotal'
+    },
+    {
+      columnName: 'Roundoff', columnValue: 'roundOff'
+    },
+    {
+      columnName: 'Invoice Total', columnValue: 'INR invoiceTotalInr'
+    },
+  ];
+  const gstCellContainerValueMap = [
+    { key: 'cgstRate', value: 'cgstAmount' },
+    { key: 'sgstRate', value: 'sgstAmount' },
+    { key: 'igstRate', value: 'igstAmount' },
+  ]
   return (
     <div>
       <h1>Pdf report</h1>
@@ -34,77 +69,67 @@ const PdfReportData = ({ items, customerDetails, date,
                   </View>
                 </View>
                 <View style={styles.customerAndShipmentDetails}>
-                  <View style={styles.column}>
-                    <View style={styles.detailSection}>
-                      <Text>Customer Name: {customerDetails.customerName}</Text>
-                    </View>
-                    <View style={styles.detailSection}>
-                      <Text>Address: {customerDetails.address}</Text>
-                    </View>
-                    <View style={styles.detailSection}>
-                      <Text>Customer GST: {customerDetails.customerGst}</Text>
-                    </View>
-                    <View style={styles.detailSection}>
-                      <Text>Phone Number: {customerDetails.phoneNumber}</Text>
-                    </View>
-                    <View style={styles.detailSection}>
-                      <Text>Date: {date}</Text>
-                    </View>
+                  <View style={styles.customerInfoContainer}>
+                    <Text style={styles.customerDetailsTitle}>CustomerDetails</Text>
+                    {customerInfo.map((info, index) => (
+                      <View style={styles.detailSection} key={index}>
+                        {info.label == 'Address' ? (
+                          <View style={styles.customerAndShipmentDetailsAddress}>
+                            <Text style={styles.customerAndShipmentDetailsAttributeKey}>{info.label}:</Text>
+                            <Text style={styles.customerAndShipmentDetailsAttributeValue} > {info.value} </Text>
+                          </View>
+                        ) : (
+                          <>
+                            <Text style={styles.customerAndShipmentDetailsAttributeKey}>{info.label}:</Text>
+                            <Text style={styles.customerAndShipmentDetailsAttributeValue} > {info.value} </Text>
+                          </>
+                        )
+                        }
+                      </View>
+                    ))}
                   </View>
                   <View style={styles.separator} />
-                  <View style={styles.column}>
-                    <View style={styles.detailSection}>
-                      <Text>Customer Name: {shipmentDetails.customerName}</Text>
-                    </View>
-                    <View style={styles.detailSection}>
-                      <Text>Address: {shipmentDetails.address}</Text>
-                    </View>
-                    <View style={styles.detailSection}>
-                      <Text>Customer GST: {shipmentDetails.customerGst}</Text>
-                    </View>
-                    <View style={styles.detailSection}>
-                      <Text>Phone Number: {shipmentDetails.phoneNumber}</Text>
-                    </View>
-                    <View style={styles.detailSection}>
-                      <Text>Date: {date}</Text>
-                    </View>
+                  <View style={styles.shipmentInfoContainer}>
+                    <Text style={styles.customerDetailsTitle}>ShipmentDetails</Text>
+                    {shipmentInfo.map((info, index) => (
+                      <View style={styles.detailSection} key={index}>
+                        {info.label == 'Address' ? (
+                          <View style={styles.customerAndShipmentDetailsAddress}>
+                            <Text style={styles.customerAndShipmentDetailsAttributeKey}>{info.label}:</Text>
+                            <Text style={styles.customerAndShipmentDetailsAttributeValue} > {info.value} </Text>
+                          </View>
+                        ) : (
+                          <>
+                            <Text style={styles.customerAndShipmentDetailsAttributeKey}>{info.label}:</Text>
+                            <Text style={styles.customerAndShipmentDetailsAttributeValue} > {info.value} </Text>
+                          </>
+                        )
+                        }
+                      </View>
+                    ))}
                   </View>
                 </View>
                 <View style={styles.table}>
                   <View style={styles.tableRow}>
-                    <Text style={[styles.headerCell, styles.slnoCell]}>SL No</Text>
-                    <Text style={[styles.headerCell, styles.descriptionCell]}>Description</Text>
-                    <Text style={[styles.headerCell, styles.hsnCodeCell]}>HSN Code</Text>
-                    <Text style={[styles.headerCell, styles.qtyCell]}>Quantity</Text>
-                    <Text style={[styles.headerCell, styles.rateCell]}>Rate</Text>
-                    <Text style={[styles.headerCell, styles.totalCell]}>Total</Text>
-                    <View style={styles.gstCellContainer}>
-                      <Text
-                        style={styles.gstHeading}
-                      >CGST</Text>
-                      <View style={styles.gstCell}>
-                        <Text style={styles.gstSubHeader}>Rate</Text>
-                        <Text style={styles.gstSubHeaderLast}>Amount</Text>
-                      </View>
-                    </View>
-                    <View style={styles.gstCellContainer}>
-                      <Text
-                        style={styles.gstHeading}
-                      >SGST</Text>
-                      <View style={styles.gstCell}>
-                        <Text style={styles.gstSubHeader}>Rate</Text>
-                        <Text style={styles.gstSubHeaderLast}>Amount</Text>
-                      </View>
-                    </View>
-                    <View style={styles.gstCellContainer}>
-                      <Text
-                        style={styles.gstHeading}
-                      >IGST</Text>
-                      <View style={styles.gstCell}>
-                        <Text style={styles.gstSubHeader}>Rate</Text>
-                        <Text style={styles.gstSubHeaderLast}>Amount</Text>
-                      </View>
-                    </View>
+                    <Text style={[styles.headerCell, styles.slnoCell, styles.boldRobotFont]}>SL No</Text>
+                    <Text style={[styles.headerCell, styles.descriptionCell, styles.boldRobotFont]}>Description</Text>
+                    <Text style={[styles.headerCell, styles.hsnCodeCell, styles.boldRobotFont]}>HSN Code</Text>
+                    <Text style={[styles.headerCell, styles.qtyCell, styles.boldRobotFont]}>Quantity</Text>
+                    <Text style={[styles.headerCell, styles.rateCell, styles.boldRobotFont]}>Rate</Text>
+                    <Text style={[styles.headerCell, styles.totalCell, styles.boldRobotFont]}>Total</Text>
+                    {
+                      gstList.map(tax => (
+                        <View key={tax} style={styles.gstCellContainer}>
+                          <Text style={[styles.gstHeading, styles.boldRobotFont]}>
+                            {tax}
+                          </Text>
+                          <View style={styles.gstCell}>
+                            <Text style={[styles.gstSubHeader, styles.boldRobotFont]}>Rate</Text>
+                            <Text style={[styles.gstSubHeaderLast, styles.boldRobotFont]}>Amount</Text>
+                          </View>
+                        </View>
+                      ))
+                    }
                   </View>
                   {itemsInPieces.map((item, index) => (
                     <View key={index} style={styles.tableRow}>
@@ -114,68 +139,36 @@ const PdfReportData = ({ items, customerDetails, date,
                       <Text style={[styles.tableCell, styles.qtyCell]}>{item.qty}</Text>
                       <Text style={[styles.tableCell, styles.rateCell]}>{item.rate}</Text>
                       <Text style={[styles.tableCell, styles.totalCell]}>{item.total}</Text>
-                      <View style={styles.gstCellContainerValue}>
-                        <View style={styles.gstCell}>
-                          <Text style={styles.gstSubHeaderValue}>{item.cgstRate}</Text>
-                          <Text style={styles.gstSubHeaderLastValue}>{item.cgstAmount}</Text>
-                        </View>
-                      </View>
-                      <View style={styles.gstCellContainerValue}>
-                        <View style={styles.gstCell}>
-                          <Text style={styles.gstSubHeaderValue}>{item.sgstRate}</Text>
-                          <Text style={styles.gstSubHeaderLastValue}>{item.sgstAmount}</Text>
-                        </View>
-                      </View>
-                      <View style={styles.gstCellContainerValue}>
-                        <View style={styles.gstCell}>
-                          <Text style={styles.gstSubHeaderValue}>{item.igstRate}</Text>
-                          <Text style={styles.gstSubHeaderLastValue}>{item.igstAmount}</Text>
-                        </View>
-                      </View>
+                      {
+                        gstCellContainerValueMap.map((attribute) => (
+                          <View style={styles.gstCellContainerValue}>
+                            <View style={styles.gstCell}>
+                              <Text style={styles.gstSubHeaderValue}>{item[attribute.key]}</Text>
+                              <Text style={styles.gstSubHeaderLastValue}>{item[attribute.value]}</Text>
+                            </View>
+                          </View>
+                        ))}
                     </View>
                   ))}
                   <View style={styles.tableRow}>
                     <Text style={[styles.tableCell, styles.descriptionTotalCell]}>Total</Text>
                     <Text style={[styles.tableCell, styles.totalCell]}>{gstTotalValues.rateTotal}</Text>
-                    <View style={styles.gstCellContainerValue}>
-                      <View style={styles.gstCell}>
-                        <Text style={styles.gstSubHeaderValue}> </Text>
-                        <Text style={styles.gstSubHeaderLastValue}>{gstTotalValues.cgstTotal}</Text>
+                    {gstTotalList.map((gstTotalAttribute) => (
+                      <View style={styles.gstCellContainerValue}>
+                        <View style={styles.gstCell}>
+                          <Text style={styles.gstSubHeaderValue}></Text>
+                          <Text style={styles.gstSubHeaderLastValue}>{gstTotalValues[gstTotalAttribute]}</Text>
+                        </View>
                       </View>
+                    ))}
+                  </View>
+                  {gstTotalFInalListMap.map((column) => (
+                    <View style={styles.tableRow}>
+                      <Text style={[styles.tableCell, styles.gstTotalCell]}></Text>
+                      <Text style={[styles.tableCell, styles.gstTotalLabelCell]}>{column.columnName}</Text>
+                      <Text style={[styles.tableCell, styles.gstTotalValueCell]}>{gstTotalValues[column.columnValue]}</Text>
                     </View>
-                    <View style={styles.gstCellContainerValue}>
-                      <View style={styles.gstCell}>
-                        <Text style={styles.gstSubHeaderValue}> </Text>
-                        <Text style={styles.gstSubHeaderLastValue}>{gstTotalValues.sgstTotal}</Text>
-                      </View>
-                    </View>
-                    <View style={styles.gstCellContainerValue}>
-                      <View style={styles.gstCell}>
-                        <Text style={styles.gstSubHeaderValue}> </Text>
-                        <Text style={styles.gstSubHeaderLastValue}>{gstTotalValues.igstTotal}</Text>
-                      </View>
-                    </View>
-                  </View>
-                  <View style={styles.tableRow}>
-                    <Text style={[styles.tableCell, styles.gstTotalCell]}></Text>
-                    <Text style={[styles.tableCell, styles.gstTotalLabelCell]}>GST TOTAL</Text>
-                    <Text style={[styles.tableCell, styles.gstTotalValueCell]}>{gstTotalValues.gstTotalSum}</Text>
-                  </View>
-                  <View style={styles.tableRow}>
-                    <Text style={[styles.tableCell, styles.gstTotalCell]}></Text>
-                    <Text style={[styles.tableCell, styles.gstTotalLabelCell]}>RATE TOTAL</Text>
-                    <Text style={[styles.tableCell, styles.gstTotalValueCell]}>{gstTotalValues.rateTotal}</Text>
-                  </View>
-                  <View style={styles.tableRow}>
-                    <Text style={[styles.tableCell, styles.gstTotalCell]}></Text>
-                    <Text style={[styles.tableCell, styles.gstTotalLabelCell]}>Roundoff</Text>
-                    <Text style={[styles.tableCell, styles.gstTotalValueCell]}>{gstTotalValues.roundOff}</Text>
-                  </View>
-                  <View style={styles.tableRow}>
-                    <Text style={[styles.tableCell, styles.gstTotalCell]}></Text>
-                    <Text style={[styles.tableCell, styles.gstTotalLabelCell]}>Invoice Total INR</Text>
-                    <Text style={[styles.tableCell, styles.gstTotalValueCell]}>{gstTotalValues.invoiceTotalInr}</Text>
-                  </View>
+                  ))}
                 </View>
                 <View style={styles.termsOfSalePaymentDetailsContainer}>
                   <View style={styles.termsOfSaleContainer}>
@@ -188,172 +181,6 @@ const PdfReportData = ({ items, customerDetails, date,
               </View>
             </Page>
           ))}
-          { /*
-          <Page size="A4" style={styles.page}>
-            <View style={styles.pageStyle}>
-              <View>
-                <View style={styles.logoheaderContainer}>
-                  <Image src={logoheader} style={styles.logoheader} />
-                </View>
-                <View style={styles.box}>
-                  <View style={styles.column}>
-                    <View style={styles.detailSection}>
-                      <Text>Customer Name: {customerDetails.customerName}</Text>
-                    </View>
-                    <View style={styles.detailSection}>
-                      <Text>Address: {customerDetails.address}</Text>
-                    </View>
-                    <View style={styles.detailSection}>
-                      <Text>Customer GST: {customerDetails.customerGst}</Text>
-                    </View>
-                    <View style={styles.detailSection}>
-                      <Text>Phone Number: {customerDetails.phoneNumber}</Text>
-                    </View>
-                    <View style={styles.detailSection}>
-                      <Text>Date: {date}</Text>
-                    </View>
-                  </View>
-                  <View style={styles.separator} />
-                  <View style={styles.column}>
-                    <View style={styles.detailSection}>
-                      <Text>Customer Name: {shipmentDetails.customerName}</Text>
-                    </View>
-                    <View style={styles.detailSection}>
-                      <Text>Address: {shipmentDetails.address}</Text>
-                    </View>
-                    <View style={styles.detailSection}>
-                      <Text>Customer GST: {shipmentDetails.customerGst}</Text>
-                    </View>
-                    <View style={styles.detailSection}>
-                      <Text>Phone Number: {shipmentDetails.phoneNumber}</Text>
-                    </View>
-                    <View style={styles.detailSection}>
-                      <Text>Date: {date}</Text>
-                    </View>
-                  </View>
-                </View>
-                <View style={styles.table}>
-                  <View style={styles.tableRow}>
-                    <Text style={[styles.headerCell, styles.slnoCell]}>SL No</Text>
-                    <Text style={[styles.headerCell, styles.descriptionCell]}>Description</Text>
-                    <Text style={[styles.headerCell, styles.hsnCodeCell]}>HSN Code</Text>
-                    <Text style={[styles.headerCell, styles.qtyCell]}>Quantity</Text>
-                    <Text style={[styles.headerCell, styles.rateCell]}>Rate</Text>
-                    <Text style={[styles.headerCell, styles.totalCell]}>Total</Text>
-                    <View style={styles.gstCellContainer}>
-                      <Text
-                        style={styles.gstHeading}
-                      >CGST</Text>
-                      <View style={styles.gstCell}>
-                        <Text style={styles.gstSubHeader}>Rate</Text>
-                        <Text style={styles.gstSubHeaderLast}>Amount</Text>
-                      </View>
-                    </View>
-                    <View style={styles.gstCellContainer}>
-                      <Text
-                        style={styles.gstHeading}
-                      >SGST</Text>
-                      <View style={styles.gstCell}>
-                        <Text style={styles.gstSubHeader}>Rate</Text>
-                        <Text style={styles.gstSubHeaderLast}>Amount</Text>
-                      </View>
-                    </View>
-                    <View style={styles.gstCellContainer}>
-                      <Text
-                        style={styles.gstHeading}
-                      >IGST</Text>
-                      <View style={styles.gstCell}>
-                        <Text style={styles.gstSubHeader}>Rate</Text>
-                        <Text style={styles.gstSubHeaderLast}>Amount</Text>
-                      </View>
-                    </View>
-                  </View>
-                  {items.map((item, index) => (
-                    <View key={index} style={styles.tableRow}>
-                      <Text style={[styles.tableCell, styles.slnoCell]}>{item.slno}</Text>
-                      <Text style={[styles.tableCell, styles.descriptionCell]}>{item.description}</Text>
-                      <Text style={[styles.tableCell, styles.hsnCodeCell]}>{item.hsnCode}</Text>
-                      <Text style={[styles.tableCell, styles.qtyCell]}>{item.qty}</Text>
-                      <Text style={[styles.tableCell, styles.rateCell]}>{item.rate}</Text>
-                      <Text style={[styles.tableCell, styles.totalCell]}>{item.total}</Text>
-                      <View style={styles.gstCellContainerValue}>
-                        <View style={styles.gstCell}>
-                          <Text style={styles.gstSubHeaderValue}>{item.cgstRate}</Text>
-                          <Text style={styles.gstSubHeaderLastValue}>{item.cgstAmount}</Text>
-                        </View>
-                      </View>
-                      <View style={styles.gstCellContainerValue}>
-                        <View style={styles.gstCell}>
-                          <Text style={styles.gstSubHeader}>{item.sgstRate}</Text>
-                          <Text style={styles.gstSubHeaderLast}>{item.sgstAmount}</Text>
-                        </View>
-                      </View>
-                      <View style={styles.gstCellContainerValue}>
-                        <View style={styles.gstCell}>
-                          <Text style={styles.gstSubHeader}>{item.igstRate}</Text>
-                          <Text style={styles.gstSubHeaderLast}>{item.igstAmount}</Text>
-                        </View>
-                      </View>
-                    </View>
-                  ))}
-                  <View style={styles.tableRow}>
-                    <Text style={[styles.tableCell, styles.descriptionTotalCell]}>Total</Text>
-                    <Text style={[styles.tableCell, styles.hsnCodeCell]}></Text>
-                    <Text style={[styles.tableCell, styles.qtyCell]}></Text>
-                    <Text style={[styles.tableCell, styles.rateCell]}></Text>
-                    <Text style={[styles.tableCell, styles.totalCell]}>{gstTotalValues.rateTotal}</Text>
-                    <View style={styles.gstCellContainerValue}>
-                      <View style={styles.gstCell}>
-                        <Text style={styles.gstSubHeader}></Text>
-                        <Text style={styles.gstSubHeaderLast}>{gstTotalValues.cgstTotal}</Text>
-                      </View>
-                    </View>
-                    <View style={styles.gstCellContainerValue}>
-                      <View style={styles.gstCell}>
-                        <Text style={styles.gstSubHeader}></Text>
-                        <Text style={styles.gstSubHeaderLast}>{gstTotalValues.sgstTotal}</Text>
-                      </View>
-                    </View>
-                    <View style={styles.gstCellContainerValue}>
-                      <View style={styles.gstCell}>
-                        <Text style={styles.gstSubHeader}></Text>
-                        <Text style={styles.gstSubHeaderLast}>{gstTotalValues.igstTotal}</Text>
-                      </View>
-                    </View>
-                  </View>
-                  <View style={styles.tableRow}>
-                    <Text style={[styles.tableCell, styles.gstTotalCell]}></Text>
-                    <Text style={[styles.tableCell, styles.gstTotalLabelCell]}>GST TOTAL</Text>
-                    <Text style={[styles.tableCell, styles.gstTotalValueCell]}>{gstTotalValues.gstTotalSum}</Text>
-                  </View>
-                  <View style={styles.tableRow}>
-                    <Text style={[styles.tableCell, styles.gstTotalCell]}></Text>
-                    <Text style={[styles.tableCell, styles.gstTotalLabelCell]}>RATE TOTAL</Text>
-                    <Text style={[styles.tableCell, styles.gstTotalValueCell]}>{gstTotalValues.rateTotal}</Text>
-                  </View>
-                  <View style={styles.tableRow}>
-                    <Text style={[styles.tableCell, styles.gstTotalCell]}></Text>
-                    <Text style={[styles.tableCell, styles.gstTotalLabelCell]}>Roundoff</Text>
-                    <Text style={[styles.tableCell, styles.gstTotalValueCell]}>{gstTotalValues.roundOff}</Text>
-                  </View>
-                  <View style={styles.tableRow}>
-                    <Text style={[styles.tableCell, styles.gstTotalCell]}></Text>
-                    <Text style={[styles.tableCell, styles.gstTotalLabelCell]}>Invoice Total INR</Text>
-                    <Text style={[styles.tableCell, styles.gstTotalValueCell]}>{gstTotalValues.invoiceTotalInr}</Text>
-                  </View>
-                </View>
-                <View style={styles.termsOfSalePaymentDetailsContainer}>
-                  <View style={styles.termsOfSaleContainer}>
-                    <Image src={termsOfSale} style={styles.termsOfSale} />
-                  </View>
-                  <View style={styles.paymentDetailsContainer}>
-                    <Image src={paymentDetails} style={styles.paymentDetails} />
-                  </View>
-                </View>
-              </View>
-            </View>
-          </Page>
-                  */}
         </Document>
       </PDFViewer>
     </div >

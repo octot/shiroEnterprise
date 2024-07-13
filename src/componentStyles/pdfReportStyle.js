@@ -1,5 +1,28 @@
-import { StyleSheet } from '@react-pdf/renderer';
+import { Font, StyleSheet } from '@react-pdf/renderer';
+import roboto from '../fonts/Roboto-Bold.ttf'
+Font.register(
+    {
+        family: 'Roboto',
+        fonts: [
+            { src: roboto }
+        ]
+    }
+)
 const styles = StyleSheet.create({
+
+    boldRobotFont: {
+        fontFamily: "Roboto"
+    },
+    customerAndShipmentDetailsAttributeKey: {
+        fontFamily: "Roboto"
+    },
+    customerAndShipmentDetailsAttributeValue: {
+
+    },
+    customerAndShipmentDetailsAddress: {
+        // backgroundColor:'green',
+        height: '100'
+    },
     pageStyle: {
         margin: '0',
         height: 'auto',
@@ -37,7 +60,7 @@ const styles = StyleSheet.create({
         width: '45%',
         borderRight: '1px solid black',
         borderBottom: '1px solid black',
-        height:'100%'
+        height: '100%'
     },
     paymentDetails: {
         width: '100%',
@@ -85,7 +108,10 @@ const styles = StyleSheet.create({
         fontSize: '10'
     },
     slnoCell: { flex: 1 },
-    descriptionCell: { flex: 2.6 },
+    descriptionCell: {
+        fontSize: 9,
+        flex: 2.6
+    },
     hsnCodeCell: { flex: 2 },
     qtyCell: { flex: 2 },
     rateCell: { flex: 2 },
@@ -157,23 +183,33 @@ const styles = StyleSheet.create({
     },
     customerAndShipmentDetails: {
         width: '90%',  // Adjust width as needed
-        height: 100,   // Adjust height as needed
+        height: 200,   // Adjust height as needed
         flexDirection: 'row',
         justifyContent: 'space-between',
         padding: 10,
         borderWidth: 1,
         borderColor: '#000',
         marginLeft: 30,
-        marginTop: 20
+        marginTop: 20,
     },
-    column: {
+    customerInfoContainer: {
         flex: 1,
-        marginHorizontal: 5,
+        paddingRight: 10,
+
+    },
+    shipmentInfoContainer: {
+        flex: 1,
+        paddingLeft: 10,
     },
     detailSection: {
         fontSize: 10,
-        lineHeight: 1,
         marginBottom: 10,
+        flexDirection: 'row'
+    },
+    customerDetailsTitle: {
+        fontSize: 16,
+        textAlign: 'center',
+        marginBottom: '12',
     },
     sectionHeader: {
         fontSize: 14,
@@ -183,18 +219,18 @@ const styles = StyleSheet.create({
     separator: {
         width: 1,
         backgroundColor: '#000',
-        height: 98,
+        height: 199,
         marginTop: -10
     },
-    billNoContainer:{
-        display:'flex',
-        alignItems:'flex-start',
-        justifyContent:'center',
-        border:'1px solid black',
-        height:'30',
-        width:'90%',
-        marginTop:'30',
-        marginLeft:'30',
+    billNoContainer: {
+        display: 'flex',
+        alignItems: 'flex-start',
+        justifyContent: 'center',
+        border: '1px solid black',
+        height: '30',
+        width: '90%',
+        marginTop: '30',
+        marginLeft: '30',
         fontSize: 13,
     }
 });
