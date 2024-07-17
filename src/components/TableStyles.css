@@ -1,46 +1,12 @@
-/* TableStyles.css */
+.customer-details-headers {
+  font-weight: bold !important;
+}
 
-.custom-table {
-    border-collapse: separate;
-    border-spacing: 24px 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
-    border-radius: 5px;
-  }
-  
-  .custom-table .MuiTableCell-root {
-    border-bottom: none;
-  }
-  
-  .custom-table-head {
-    background-color: #389168 !important;
-    /* primary.main color, adjust as needed */
-  }
-  
-  .custom-table-head th {
-    color: #ffffff;
-    font-weight: bold;
-    text-transform: uppercase;
-  }
-  
-  .custom-table-cell {
-    
-    padding: 16px;
-  }
-  
-  .custom-table-cell:first-child {
-    border-top-left-radius: 8px;
-    border-bottom-left-radius: 8px;
-  }
-  
-  .custom-table-cell:last-child {
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-  }
-  
-  .custom-table-row {
-    background-color: #f1f1f1; /* background.paper color, adjust as needed */
-  }
-  
-  .custom-table-row:hover {
-    background-color: rgba(239, 255, 14, 0.04); /* action.hover color, adjust as needed */
-  }
+.customer-details-Address {
+  width: 350px;
+}
+
+.CustomerDetailsTableRow:hover {
+  background-color: #f2f2f2;
+  /* Light grey background */
+}

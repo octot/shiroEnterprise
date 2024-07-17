@@ -3,6 +3,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { TextField, Button, Container, Typography, Box } from '@mui/material';
 import { styled } from '@mui/system';
+import '../componentStyles/customerDetails.css'
 const ResponsiveTextField = styled(TextField)(({ theme }) => ({
   width: '100%',
   '@media (min-width: 600px)': {
@@ -54,39 +55,41 @@ const CustomerForm = () => {
   };
   const customerAttributes = ['name', 'address', 'customerGst', 'phoneNumber']
   return (
-    <Container maxWidth="sm" >
-      <Box component="form" onSubmit={handleSubmit} sx={{
-        mt: 2,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-      }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Customer Creation
-        </Typography>
-        {customerAttributes.map((field) => (
-          <ResponsiveTextField
-            key={field}
-            fullWidth
-            label={field.charAt(0).toUpperCase() + field.slice(1)}
-            name={field}
-            value={formData[field]}
-            onChange={handleChange}
-            required
-            margin="normal"
-          />
-        ))}
-        <Button type="submit" variant="contained" color="primary" sx={{
+    <div className="customerDetailsMain">
+      <Container maxWidth="sm">
+        <Box component="form" onSubmit={handleSubmit} sx={{
           mt: 2,
           display: 'flex',
-          justifyContent: 'center', alignItems: 'center'
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
         }}>
-          Submit
-        </Button>
-        <ToastContainer />
-      </Box>
-    </Container>
-  );
+          <Typography variant="h4" component="h1" gutterBottom>
+            Customer Creation
+          </Typography>
+          {customerAttributes.map((field) => (
+            <ResponsiveTextField
+              key={field}
+              fullWidth
+              label={field.charAt(0).toUpperCase() + field.slice(1)}
+              name={field}
+              value={formData[field]}
+              onChange={handleChange}
+              required
+              margin="normal"
+            />
+          ))}
+          <Button type="submit" variant="contained" sx={{
+            mt: 2,
+            display: 'flex',
+            justifyContent: 'center', alignItems: 'center'
+          }}>
+            Submit
+          </Button>
+          <ToastContainer />
+        </Box>
+      </Container>
+    </div>
+  )
 }
 export default CustomerForm;

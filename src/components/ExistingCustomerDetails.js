@@ -83,47 +83,35 @@ function ExistingCustomerDetails() {
   });
   return (
     <ThemeProvider theme={theme}>
-      <Typography variant="h4" component="h2" gutterBottom display={'flex'} justifyContent={'center'}>
-        Existing Customers
-      </Typography>
-      <Container component={Paper} sx={{ mt: 4, p: 2 }}>
-        <Table className="custom-table">
+      <Container>
+        <TextField
+          value={search}
+          onChange={handleSearchChange}
+          placeholder="SearchName"
+          variant="standard"
+          sx={{
+            width: '200px',
+            '& .MuiInput-underline:before': {
+              borderBottom: '2px solid rgba(0, 0, 0, 0.42)', // Change the default color and thickness
+            },
+          }}
+        />
+        <Table >
           <TableHead>
-            <TableRow className="custom-table-head">
-              <TableCell className="custom-table-cell">
-                <Box display="flex" flexDirection="column" alignItems="center">
-                  <Typography variant="h7">Name</Typography>
-                  <TextField
-                    value={search}
-                    onChange={handleSearchChange}
-                    placeholder="Search by name"
-                    size="small"
-                    variant="outlined"
-                    sx={{
-                      m: 1,
-                      width: '100%', // Ensure the TextField takes up full width of its container
-                      '& .MuiOutlinedInput-root': {
-                        backgroundColor: 'common.white',
-                        '&:hover': {
-                          backgroundColor: 'grey.100',
-                        },
-                      }
-                    }}
-                  />
-                </Box>
-              </TableCell>
-              <TableCell className="custom-table-cell">Address</TableCell>
-              <TableCell className="custom-table-cell">Customer GST</TableCell>
-              <TableCell className="custom-table-cell">Phone Number</TableCell>
-              <TableCell className="custom-table-cell">Actions</TableCell>
+            <TableRow>
+              <TableCell className="customer-details-headers customer-details-Name">Name</TableCell>
+              <TableCell className="customer-details-headers customer-details-Address">Address</TableCell>
+              <TableCell className="customer-details-headers customer-details-Customer_GST">Customer GST</TableCell>
+              <TableCell className="customer-details-headers customer-details-Phone_Number">Phone Number</TableCell>
+              <TableCell className="customer-details-headers customer-details-Actions">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {filteredCustomers.map((customer) => (
-              <TableRow key={customer._id} className="custom-table-row">
+              <TableRow key={customer._id} className='CustomerDetailsTableRow'>
                 {editId === customer._id ? (
                   <>
-                    <TableCell className="custom-table-cell">
+                    <TableCell className="customer-details-Name">
                       <TextField
                         fullWidth
                         name="name"
@@ -131,7 +119,7 @@ function ExistingCustomerDetails() {
                         onChange={handleEditChange}
                       />
                     </TableCell>
-                    <TableCell className="custom-table-cell">
+                    <TableCell className="customer-details-Address">
                       <TextField
                         fullWidth
                         name="address"
@@ -139,7 +127,7 @@ function ExistingCustomerDetails() {
                         onChange={handleEditChange}
                       />
                     </TableCell>
-                    <TableCell className="custom-table-cell">
+                    <TableCell className="customer-details-Customer_GST">
                       <TextField
                         fullWidth
                         name="customerGst"
@@ -147,7 +135,7 @@ function ExistingCustomerDetails() {
                         onChange={handleEditChange}
                       />
                     </TableCell>
-                    <TableCell className="custom-table-cell">
+                    <TableCell className="customer-details-Phone_Number">
                       <TextField
                         fullWidth
                         name="phoneNumber"
@@ -155,7 +143,7 @@ function ExistingCustomerDetails() {
                         onChange={handleEditChange}
                       />
                     </TableCell>
-                    <TableCell className="custom-table-cell">
+                    <TableCell className="customer-details-Actions">
                       <Button
                         variant="contained"
                         color="primary"
@@ -167,11 +155,11 @@ function ExistingCustomerDetails() {
                   </>
                 ) : (
                   <>
-                    <TableCell className="custom-table-cell">{customer.name}</TableCell>
-                    <TableCell className="custom-table-cell">{customer.address}</TableCell>
-                    <TableCell className="custom-table-cell">{customer.customerGst}</TableCell>
-                    <TableCell className="custom-table-cell">{customer.phoneNumber}</TableCell>
-                    <TableCell className="custom-table-cell">
+                    <TableCell className="customer-details-Name">{customer.name}</TableCell>
+                    <TableCell className="customer-details-Address">{customer.address}</TableCell>
+                    <TableCell className="customer-details-Customer_GST">{customer.customerGst}</TableCell>
+                    <TableCell className="customer-details-Phone_Number">{customer.phoneNumber}</TableCell>
+                    <TableCell >
                       <Box display="flex" justifyContent="space-between" flexWrap="wrap">
                         <Button
                           variant="contained"
@@ -205,5 +193,4 @@ function ExistingCustomerDetails() {
     </ThemeProvider>
   );
 }
-
 export default ExistingCustomerDetails;

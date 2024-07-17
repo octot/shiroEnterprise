@@ -28,7 +28,6 @@ const customerSchema = new mongoose.Schema({
   customerGst: String,
   phoneNumber: String
 });
-
 // Define a model
 const Customer = mongoose.model('Customer', customerSchema);
 app.post('/api/customers', async (req, res) => {
@@ -85,4 +84,36 @@ const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${port}`);
 });
-module.exports = { customerSchema };
+const SequenceSchema = new mongoose.Schema(
+  {
+    _id: String,
+    sequence_value: Number
+  }
+)
+const Sequence = mongoose.model('AutoSequence', SequenceSchema);
+async function getNextSequence(sequenceName) {
+  const result = await Sequence.findByIdAndUpdate(
+    sequenceName,
+    { $inc: { sequence_value: 1 } },
+    { new: true, upsert: true }
+  )
+  return result.sequence_value
+}
+function getCurrentFiscalYear() {
+  const today = new Date();
+  return today.getMonth() >= 3 ? today.getFullYear() : today.getFullYear() - 1;
+}
+app.get('/api/nextBillNumber', async (req, res) => {
+  try {
+    const fiscalYear = getCurrentFiscalYear();
+    const sequenceName = `billNumber_${fiscalYear}`
+    const sequenceValue = await getNextSequence(sequenceName)
+    const paddedSequence = sequenceValue.toString().padStart(3, '0')
+    const billNumber = `SP${paddedSequence}_${fiscalYear}_${fiscalYear + 1}`
+    res.json({ billNumber })
+  }
+  catch (error) {
+  }
+}
+)
+module.exports = { customerSchema, SequenceSchema };

@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import axios from 'axios';
 import ItemsTable from './ItemsTable';
 import { styled } from '@mui/system';
+import '../componentStyles/B2B.css'
 function B2B() {
   const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
   const [customers, setCustomers] = useState([]);
@@ -94,67 +95,68 @@ function B2B() {
   const customerAndShipmentDetailsInputs = [{ name: 'customerName' }, { name: 'address' }, { name: 'customerGst' }, { name: 'phoneNumber' }, { name: 'date' }
   ]
   return (
-    <Container>
-      <Typography textAlign={'center'} variant="h4" component="h2" gutterBottom>
-        Customer Details
-      </Typography>
-      <Box component="form" sx={{ mt: 3 }} noValidate autoComplete="off">
-        <Autocomplete
-          options={customers}
-          getOptionLabel={(option) => option.name}
-          value={selectedCustomer}
-          onChange={handleCustomerChange}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Customer Name"
-              variant="filled"
-              margin="normal"
-              color="success"
-              fullWidth
-            />
-          )}
-        />
-        <TextField
-          id="address"
-          label="Address"
-          variant="outlined"
-          value={customerDetails.address}
-          onChange={(e) => setCustomerDetails({ ...customerDetails, address: e.target.value })}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          id="customerGst"
-          label="Customer GST"
-          variant="outlined"
-          value={customerDetails.customerGst}
-          onChange={(e) => setCustomerDetails({ ...customerDetails, customerGst: e.target.value })}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          id="phoneNumber"
-          label="Phone Number"
-          variant="outlined"
-          value={customerDetails.phoneNumber}
-          onChange={(e) => setCustomerDetails({ ...customerDetails, phoneNumber: e.target.value })}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          id="date"
-          label="Date"
-          type="date"
-          value={date}
-          onChange={handleDateChange}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          fullWidth
-          margin="normal"
-        />
-        {/* <Button
+    <div className='B2BMain'>
+      <Container>
+        <Typography textAlign={'center'} variant="h4" component="h2" gutterBottom>
+          Customer Details
+        </Typography>
+        <Box component="form" sx={{ mt: 3 }} noValidate autoComplete="off">
+          <Autocomplete
+            options={customers}
+            getOptionLabel={(option) => option.name}
+            value={selectedCustomer}
+            onChange={handleCustomerChange}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Customer Name"
+                variant="filled"
+                margin="normal"
+                color="success"
+                fullWidth
+              />
+            )}
+          />
+          <TextField
+            id="address"
+            label="Address"
+            variant="outlined"
+            value={customerDetails.address}
+            onChange={(e) => setCustomerDetails({ ...customerDetails, address: e.target.value })}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            id="customerGst"
+            label="Customer GST"
+            variant="outlined"
+            value={customerDetails.customerGst}
+            onChange={(e) => setCustomerDetails({ ...customerDetails, customerGst: e.target.value })}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            id="phoneNumber"
+            label="Phone Number"
+            variant="outlined"
+            value={customerDetails.phoneNumber}
+            onChange={(e) => setCustomerDetails({ ...customerDetails, phoneNumber: e.target.value })}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            id="date"
+            label="Date"
+            type="date"
+            value={date}
+            onChange={handleDateChange}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            fullWidth
+            margin="normal"
+          />
+          {/* <Button
           variant="contained"
           color="primary"
           onClick={handleSubmit}
@@ -162,72 +164,73 @@ function B2B() {
         >
           Save
         </Button> */}
-      </Box>
-      <Box component="form" sx={{ mt: 3 }} noValidate autoComplete="off">
-        <Button variant="contained" onClick={handleCopyValues}
-          sx={{ mt: 1, mr: 2, backgroundColor: 'blue', '&:hover': { backgroundColor: 'darkblue' } }}
-        >
-          Copy Default Values
-        </Button>
-        <Button variant="contained" onClick={handleClearValues}
-          sx={{ mt: 1, backgroundColor: 'red', '&:hover': { backgroundColor: 'darkred' } }}
-        >Clear Shipment Details</Button>
-        <Typography sx={{ mt: 3, }}
-          textAlign="center" variant="h4" component="h2" gutterBottom>
-          Shipment Details
-        </Typography>
-        <TextField
-          id="customerName"
-          label="Customer Name"
-          variant="filled"
-          value={shipmentDetails.customerName}
-          onChange={(e) => handleInputChange('customerName', e.target.value)}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          id="address"
-          label="Address"
-          variant="standard"
-          value={shipmentDetails.address}
-          onChange={(e) => handleInputChange('address', e.target.value)}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          id="customerGst"
-          label="Customer GST"
-          variant="standard"
-          value={shipmentDetails.customerGst}
-          onChange={(e) => handleInputChange('customerGst', e.target.value)}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          id="phoneNumber"
-          label="Phone Number"
-          variant="standard"
-          value={shipmentDetails.phoneNumber}
-          onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          variant="standard"
-          id="date"
-          label="Date"
-          type="date"
-          value={shipmentDetails.date}
-          onChange={(e) => handleInputChange('date', e.target.value)}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          fullWidth
-          margin="normal"
-        />
-      </Box>
-      <ItemsTable customerDetails={customerDetails} date={date} shipmentDetails={shipmentDetails} />
-    </Container>
+        </Box>
+        <Box component="form" sx={{ mt: 3 }} noValidate autoComplete="off">
+          <Button variant="contained" onClick={handleCopyValues}
+            sx={{ mt: 1, mr: 2, backgroundColor: 'blue', '&:hover': { backgroundColor: 'darkblue' } }}
+          >
+            Copy Default Values
+          </Button>
+          <Button variant="contained" onClick={handleClearValues}
+            sx={{ mt: 1, backgroundColor: 'red', '&:hover': { backgroundColor: 'darkred' } }}
+          >Clear Shipment Details</Button>
+          <Typography sx={{ mt: 3, }}
+            textAlign="center" variant="h4" component="h2" gutterBottom>
+            Shipment Details
+          </Typography>
+          <TextField
+            id="customerName"
+            label="Customer Name"
+            variant="filled"
+            value={shipmentDetails.customerName}
+            onChange={(e) => handleInputChange('customerName', e.target.value)}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            id="address"
+            label="Address"
+            variant="standard"
+            value={shipmentDetails.address}
+            onChange={(e) => handleInputChange('address', e.target.value)}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            id="customerGst"
+            label="Customer GST"
+            variant="standard"
+            value={shipmentDetails.customerGst}
+            onChange={(e) => handleInputChange('customerGst', e.target.value)}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            id="phoneNumber"
+            label="Phone Number"
+            variant="standard"
+            value={shipmentDetails.phoneNumber}
+            onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            variant="standard"
+            id="date"
+            label="Date"
+            type="date"
+            value={shipmentDetails.date}
+            onChange={(e) => handleInputChange('date', e.target.value)}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            fullWidth
+            margin="normal"
+          />
+        </Box>
+        <ItemsTable customerDetails={customerDetails} date={date} shipmentDetails={shipmentDetails} />
+      </Container>
+    </div>
   );
 }
 

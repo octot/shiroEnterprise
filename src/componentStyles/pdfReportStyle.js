@@ -9,7 +9,6 @@ Font.register(
     }
 )
 const styles = StyleSheet.create({
-
     boldRobotFont: {
         fontFamily: "Roboto"
     },
@@ -17,11 +16,9 @@ const styles = StyleSheet.create({
         fontFamily: "Roboto"
     },
     customerAndShipmentDetailsAttributeValue: {
-
     },
     customerAndShipmentDetailsAddress: {
-        // backgroundColor:'green',
-        height: '100'
+        height: '45'
     },
     pageStyle: {
         margin: '0',
@@ -149,29 +146,34 @@ const styles = StyleSheet.create({
     },
     gstSubHeader: {
         backgroundColor: '#f0f0f0',
-        flex: 1,
+        flex: 0.77,
         borderRightColor: 'black',
         borderRightWidth: 1,
-        padding: 5,
+        paddingTop: 5,
         textAlign: 'center',
         fontSize: 10,
     },
     gstSubHeaderValue: {
-        flex: 1,
-        borderRightColor: 'black',
         borderRightWidth: 1,
-        padding: 5,
+        borderRightColor: 'black', // Ensure color is set if needed
+        flex: 0.6,
+        paddingTop: 5,
+        paddingBottom: 5, // Add padding to ensure border touches bottom
         textAlign: 'center',
         fontSize: 10,
     },
     gstSubHeaderLastValue: {
-        borderRightColor: 'black',
         borderRightWidth: 1,
+        borderRightColor: 'black', // Ensure color is set if needed
         flex: 1,
-        padding: 5,
+        paddingTop: 5,
+        paddingBottom: 5, // Add padding to ensure border touches bottom
         textAlign: 'center',
-        fontSize: 9,
+        fontSize: 10,
     },
+
+
+
     gstSubHeaderLast: {
         backgroundColor: '#f0f0f0',
         borderRightColor: 'black',

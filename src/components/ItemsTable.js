@@ -26,31 +26,31 @@ const ItemsTable = ({ customerDetails, date, shipmentDetails }) => {
   const [nextSlNo, setNextSlNo] = useState(2); // Start from 2 since the first item has slno 1
   const [gstTotalValues, setGstTotalValues] = useState({});
   const [gstType, setGstType] = useState('cgst_sgst'); // Set default to 'cgst_sgst'
+  const [billNo, setBillNo] = useState('');
+
+  const changeBillNo = (event) => {
+    setBillNo(event.target.value)
+  }
   const handleChange = (index, field, value) => {
     const updatedItems = [...items];
     updatedItems[index][field] = value;
     if (field === 'qty' || field === 'rate' || field === 'cgstRate' || field === 'sgstRate' || field === 'igstRate') {
       const qty = parseFloat(updatedItems[index].qty) || 0;
       const rate = parseFloat(updatedItems[index].rate) || 0;
-      updatedItems[index].total = qty * rate;
-      console.log("gstType ", gstType)
-      console.log("gstType ", updatedItems[index].cgstRate)
+      updatedItems[index].total = Number((qty * rate).toFixed(2));
       if (gstType === "cgst_sgst") {
         updatedItems[index].igstRate = 0;
         updatedItems[index].igstAmount = 0
-        updatedItems[index].cgstAmount = (updatedItems[index].total * updatedItems[index].cgstRate) / 100;
-        updatedItems[index].sgstAmount = (updatedItems[index].total * updatedItems[index].sgstRate) / 100;
+        updatedItems[index].cgstAmount = Number(((updatedItems[index].total * updatedItems[index].cgstRate) / 100).toFixed(2));
+        updatedItems[index].sgstAmount = Number(((updatedItems[index].total * updatedItems[index].sgstRate) / 100).toFixed(2));
       }
       if (gstType === "igst") {
         updatedItems[index].cgstRate = 0;
         updatedItems[index].sgstRate = 0;
         updatedItems[index].cgstAmount = 0
         updatedItems[index].sgstAmount = 0
-        console.log("igstRate ", updatedItems[index].igstRate)
-        console.log("total_igstRate ", updatedItems[index].total)
-
-        updatedItems[index].igstAmount = (updatedItems[index].total * updatedItems[index].igstRate) / 100;
-        console.log("igstAmount", updatedItems[index].igstAmount)
+        updatedItems[index].igstAmount =
+          Number(((updatedItems[index].total * updatedItems[index].igstRate) / 100).toFixed(2));
       }
     }
     setItems(updatedItems);
@@ -79,7 +79,6 @@ const ItemsTable = ({ customerDetails, date, shipmentDetails }) => {
     let gstTotalAdded = gstTotalCalculation(items);
     setGstTotalValues(gstTotalAdded);
   }, [items]);
-  console.log("output gstTotalValues", gstTotalValues)
   function gstTotalCalculation(items) {
     console.log("gstTotalCalculation ", items)
     let gstTotal = {}
@@ -102,6 +101,13 @@ const ItemsTable = ({ customerDetails, date, shipmentDetails }) => {
     }
     roundOff = Math.round(rateTotal);
     invoiceTotalInr = roundOff + gstTotalSum
+    cgstTotal = Number(cgstTotal.toFixed(2));
+    sgstTotal = Number(sgstTotal.toFixed(2));
+    igstTotal = Number(igstTotal.toFixed(2));
+    gstTotalSum = Number(gstTotalSum.toFixed(2));
+    roundOff = Number(roundOff.toFixed(2));
+    invoiceTotalInr = Number(invoiceTotalInr.toFixed(2));
+    rateTotal = Number(rateTotal.toFixed(2));
     gstTotal = {
       cgstTotal,
       sgstTotal,
@@ -111,21 +117,9 @@ const ItemsTable = ({ customerDetails, date, shipmentDetails }) => {
       roundOff,
       invoiceTotalInr
     };
+    console.log("output from gstTotal ", gstTotal)
     return gstTotal;
   }
-  const [billNo, setBillNo] = useState('');
-  const generateBillNo = () => {
-    const alphaNumbericals = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let billNumber = '';
-    for (let i = 0; i < 4; ++i) {
-      billNumber += alphaNumbericals.charAt(Math.floor(Math.random() * alphaNumbericals.length));
-    }
-    return billNumber
-  }
-  useEffect(() => {
-    const newBillNo = generateBillNo();
-    setBillNo(newBillNo);
-  }, []);
   return (
     <Container>
       <FormControl component="fieldset">
@@ -145,6 +139,15 @@ const ItemsTable = ({ customerDetails, date, shipmentDetails }) => {
         handleChange={handleChange}
         handleRemoveRow={handleRemoveRow}
         handleAddRow={handleAddRow}
+      />
+      <TextField
+        id="billNo"
+        label="BillNo"
+        variant="outlined"
+        value={billNo}
+        onChange={changeBillNo}
+        fullWidth
+        margin="normal"
       />
       <div>
         <PdfReportData items={items} customerDetails={customerDetails}
