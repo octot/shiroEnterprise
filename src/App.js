@@ -13,6 +13,8 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import BusinessIcon from '@mui/icons-material/Business';
 import B2B from './components/B2B';
+import CustomerShipmentItemsBillRUD from './components/customerShipmentItemsBillRUD'
+// import Editcustomershipitembill from '../src/screens/Editcustomershipitembill'
 
 const minDrawerWidth = 200;
 const maxDrawerWidth = 400;
@@ -48,7 +50,7 @@ function App() {
   }, []);
 
   const drawer = (
-    <Box sx={{ backgroundColor: '#FFA07A', height: '100%' }}>
+    <Box sx={{ backgroundColor: 'white', height: '100%' }}>
       <Toolbar />
       <List>
         {[
@@ -56,6 +58,7 @@ function App() {
           { text: 'Create New Customer', icon: <AddIcon />, view: 'create' },
           { text: 'Edit/Delete Customer', icon: <EditIcon />, view: 'edit' },
           { text: 'B2B', icon: <BusinessIcon />, view: 'b2b' },
+          { text: 'Edit/delete Existing details', icon: <BusinessIcon />, view: 'EDED' },
         ].map((item) => (
           <ListItem button key={item.text} onClick={() => handleViewChange(item.view)}>
             <ListItemIcon>{item.icon}</ListItemIcon>
@@ -74,9 +77,11 @@ function App() {
         return <ExistingCustomerDetails />;
       case 'b2b':
         return <B2B />;
+      case 'EDED':
+        return <CustomerShipmentItemsBillRUD />;
       default:
         return (
-          <Typography variant="h6" sx={{ mt: 2, textAlign: 'center' }}>
+          <Typography variant="h6" sx={{ mt: 30, textAlign: 'center',fontSize:'30px'}}>
             Welcome to Customer Management
           </Typography>
         );

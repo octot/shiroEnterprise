@@ -26,7 +26,7 @@ const ItemsTable = ({ customerDetails, date, shipmentDetails }) => {
   const [nextSlNo, setNextSlNo] = useState(2); // Start from 2 since the first item has slno 1
   const [gstTotalValues, setGstTotalValues] = useState({});
   const [gstType, setGstType] = useState('cgst_sgst'); // Set default to 'cgst_sgst'
-  const [billNo, setBillNo] = useState('');
+  let [billNo, setBillNo] = useState('');
 
   const changeBillNo = (event) => {
     setBillNo(event.target.value)
@@ -120,19 +120,29 @@ const ItemsTable = ({ customerDetails, date, shipmentDetails }) => {
     console.log("output from gstTotal ", gstTotal)
     return gstTotal;
   }
+
   return (
     <Container>
-      <FormControl component="fieldset">
-        <RadioGroup
-          aria-label="gst-type"
-          name="gstType"
-          value={gstType}
-          onChange={(e) => setGstType(e.target.value)}
-        >
-          <FormControlLabel value="cgst_sgst" control={<Radio />} label="CGST & SGST" />
-          <FormControlLabel value="igst" control={<Radio />} label="IGST" />
-        </RadioGroup>
-      </FormControl>
+      <Grid container spacing={2} sx={{ marginTop: '20px' }}>
+        <FormControl component="fieldset">
+          <RadioGroup
+            aria-label="gst-type"
+            name="gstType"
+            value={gstType}
+            onChange={(e) => setGstType(e.target.value)}
+          >
+            <Grid container spacing={12}>
+              <Grid item xs={12} sm={6} md={4}>
+                <FormControlLabel value="cgst_sgst" control={<Radio />} label="CGST&amp;SGST" />
+              </Grid>
+              <Grid item xs={12} sm={6} md={4}>
+                <FormControlLabel value="igst" control={<Radio />} label="IGST" />
+              </Grid>
+            </Grid>
+
+          </RadioGroup>
+        </FormControl>
+      </Grid>
       <GstForm
         gstType={gstType}
         items={items}

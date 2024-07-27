@@ -96,7 +96,7 @@ function ExistingCustomerDetails() {
             },
           }}
         />
-        <Table >
+        <Table className='Customer-Details-Main-Table'>
           <TableHead>
             <TableRow>
               <TableCell className="customer-details-headers customer-details-Name">Name</TableCell>
@@ -111,7 +111,7 @@ function ExistingCustomerDetails() {
               <TableRow key={customer._id} className='CustomerDetailsTableRow'>
                 {editId === customer._id ? (
                   <>
-                    <TableCell className="customer-details-Name">
+                    <TableCell className="customer-details-headers-Values customer-details-Name">
                       <TextField
                         fullWidth
                         name="name"
@@ -155,11 +155,11 @@ function ExistingCustomerDetails() {
                   </>
                 ) : (
                   <>
-                    <TableCell className="customer-details-Name">{customer.name}</TableCell>
-                    <TableCell className="customer-details-Address">{customer.address}</TableCell>
-                    <TableCell className="customer-details-Customer_GST">{customer.customerGst}</TableCell>
-                    <TableCell className="customer-details-Phone_Number">{customer.phoneNumber}</TableCell>
-                    <TableCell >
+                    <TableCell className="customer-details-headers-Values customer-details-Name">{customer.name}</TableCell>
+                    <TableCell className="customer-details-headers-Values customer-details-Address">{customer.address}</TableCell>
+                    <TableCell className="customer-details-headers-Values customer-details-Customer_GST">{customer.customerGst}</TableCell>
+                    <TableCell className="customer-details-headers-Values customer-details-Phone_Number">{customer.phoneNumber}</TableCell>
+                    <TableCell className='customer-details-headers-Values'>
                       <Box display="flex" justifyContent="space-between" flexWrap="wrap">
                         <Button
                           variant="contained"

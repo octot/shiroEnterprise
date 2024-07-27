@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Container, TextField, Button, Box, Autocomplete } from '@mui/material';
+import { Grid, Typography, Container, TextField, Button, Box, Autocomplete } from '@mui/material';
 import { format } from 'date-fns';
 import axios from 'axios';
 import ItemsTable from './ItemsTable';
@@ -81,19 +81,6 @@ function B2B() {
       customerName: '', address: '', customerGst: '', phoneNumber: '', date: '',
     });
   };
-  const ResponsiveTextField = styled(TextField)(({ theme }) => ({
-    width: '100%',
-    '@media (min-width: 600px)': {
-      // backgroundColor:'blue',
-      width: '70%',
-    },
-    '@media (min-width: 960px)': {
-      // backgroundColor:'red',
-      width: '100%',
-    },
-  }));
-  const customerAndShipmentDetailsInputs = [{ name: 'customerName' }, { name: 'address' }, { name: 'customerGst' }, { name: 'phoneNumber' }, { name: 'date' }
-  ]
   return (
     <div className='B2BMain'>
       <Container>
@@ -101,62 +88,73 @@ function B2B() {
           Customer Details
         </Typography>
         <Box component="form" sx={{ mt: 3 }} noValidate autoComplete="off">
-          <Autocomplete
-            options={customers}
-            getOptionLabel={(option) => option.name}
-            value={selectedCustomer}
-            onChange={handleCustomerChange}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Customer Name"
-                variant="filled"
-                margin="normal"
-                color="success"
-                fullWidth
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Autocomplete
+                options={customers}
+                getOptionLabel={(option) => option.name}
+                value={selectedCustomer}
+                onChange={handleCustomerChange}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Customer Name"
+                    variant="filled"
+                    margin="normal"
+                    color="success"
+                    fullWidth
+                  />
+                )}
               />
-            )}
-          />
-          <TextField
-            id="address"
-            label="Address"
-            variant="outlined"
-            value={customerDetails.address}
-            onChange={(e) => setCustomerDetails({ ...customerDetails, address: e.target.value })}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            id="customerGst"
-            label="Customer GST"
-            variant="outlined"
-            value={customerDetails.customerGst}
-            onChange={(e) => setCustomerDetails({ ...customerDetails, customerGst: e.target.value })}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            id="phoneNumber"
-            label="Phone Number"
-            variant="outlined"
-            value={customerDetails.phoneNumber}
-            onChange={(e) => setCustomerDetails({ ...customerDetails, phoneNumber: e.target.value })}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            id="date"
-            label="Date"
-            type="date"
-            value={date}
-            onChange={handleDateChange}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            fullWidth
-            margin="normal"
-          />
-          {/* <Button
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <TextField
+                id="address"
+                label="Address"
+                variant="standard"
+                value={customerDetails.address}
+                onChange={(e) => setCustomerDetails({ ...customerDetails, address: e.target.value })}
+                fullWidth
+                margin="normal"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <TextField
+                id="customerGst"
+                label="Customer GST"
+                variant="standard"
+                value={customerDetails.customerGst}
+                onChange={(e) => setCustomerDetails({ ...customerDetails, customerGst: e.target.value })}
+                fullWidth
+                margin="normal"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <TextField
+                id="phoneNumber"
+                label="Phone Number"
+                variant="standard"
+                value={customerDetails.phoneNumber}
+                onChange={(e) => setCustomerDetails({ ...customerDetails, phoneNumber: e.target.value })}
+                fullWidth
+                margin="normal"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <TextField
+                id="date"
+                label="Date"
+                type="date"
+                value={date}
+                onChange={handleDateChange}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                fullWidth
+                margin="normal"
+              />
+            </Grid>
+            {/* <Button
           variant="contained"
           color="primary"
           onClick={handleSubmit}
@@ -164,6 +162,7 @@ function B2B() {
         >
           Save
         </Button> */}
+          </Grid>
         </Box>
         <Box component="form" sx={{ mt: 3 }} noValidate autoComplete="off">
           <Button variant="contained" onClick={handleCopyValues}
@@ -178,55 +177,67 @@ function B2B() {
             textAlign="center" variant="h4" component="h2" gutterBottom>
             Shipment Details
           </Typography>
-          <TextField
-            id="customerName"
-            label="Customer Name"
-            variant="filled"
-            value={shipmentDetails.customerName}
-            onChange={(e) => handleInputChange('customerName', e.target.value)}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            id="address"
-            label="Address"
-            variant="standard"
-            value={shipmentDetails.address}
-            onChange={(e) => handleInputChange('address', e.target.value)}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            id="customerGst"
-            label="Customer GST"
-            variant="standard"
-            value={shipmentDetails.customerGst}
-            onChange={(e) => handleInputChange('customerGst', e.target.value)}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            id="phoneNumber"
-            label="Phone Number"
-            variant="standard"
-            value={shipmentDetails.phoneNumber}
-            onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            variant="standard"
-            id="date"
-            label="Date"
-            type="date"
-            value={shipmentDetails.date}
-            onChange={(e) => handleInputChange('date', e.target.value)}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            fullWidth
-            margin="normal"
-          />
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                id="customerName"
+                label="Shipment Name"
+                variant="filled"
+                value={shipmentDetails.customerName}
+                onChange={(e) => handleInputChange('customerName', e.target.value)}
+                fullWidth
+                margin="normal"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <TextField
+                id="address"
+                label="Address"
+                variant="standard"
+                value={shipmentDetails.address}
+                onChange={(e) => handleInputChange('address', e.target.value)}
+                fullWidth
+                margin="normal"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <TextField
+                id="customerGst"
+                label="Customer GST"
+                variant="standard"
+                value={shipmentDetails.customerGst}
+                onChange={(e) => handleInputChange('customerGst', e.target.value)}
+                fullWidth
+                margin="normal"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <TextField
+                id="phoneNumber"
+                label="Phone Number"
+                variant="standard"
+                value={shipmentDetails.phoneNumber}
+                onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
+                fullWidth
+                margin="normal"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <TextField
+                variant="standard"
+                id="date"
+                label="Date"
+                type="date"
+                value={shipmentDetails.date}
+                onChange={(e) => handleInputChange('date', e.target.value)}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                fullWidth
+                margin="normal"
+              />
+            </Grid>
+          </Grid>
         </Box>
         <ItemsTable customerDetails={customerDetails} date={date} shipmentDetails={shipmentDetails} />
       </Container>

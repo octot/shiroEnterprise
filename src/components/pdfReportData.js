@@ -57,7 +57,7 @@ const PdfReportData = ({ items, customerDetails, date,
       columnName: 'Roundoff', columnValue: 'roundOff'
     },
     {
-      columnName: 'Invoice Total', columnValue: 'INR invoiceTotalInr'
+      columnName: 'Invoice Total', columnValue: 'invoiceTotalInr'
     },
   ];
   const gstCellContainerValueMap = [
@@ -65,6 +65,26 @@ const PdfReportData = ({ items, customerDetails, date,
     { key: 'sgstRate', value: 'sgstAmount' },
     { key: 'igstRate', value: 'igstAmount' },
   ]
+  const combinedDataOfCustShipItemBill = {
+    items: items, customerDetails: customerDetails, date: date,
+    shipmentDetails: shipmentDetails, gstTotalValues: gstTotalValues, billNo: billNo
+  }
+
+  const setCustShipItemBillDetails = async () => {
+    try {
+      const custShipItemBillDetailsData = await fetch('http://localhost:3001/api/setCustShipItemBillDetails', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(combinedDataOfCustShipItemBill)
+      });
+      const data = await custShipItemBillDetailsData.json();
+      console.log("custShipItemBillDetailsData ", data)
+    } catch (err) {
+      console.error("Failed to fetch data from setCustShipItemBillDetails ", err);
+    }
+  };
   const generateBillNumber = async () => {
     try {
       const responseOfGeneratedBillNumber = await fetch('http://localhost:3001/api/nextBillNumber');
@@ -222,14 +242,22 @@ const PdfReportData = ({ items, customerDetails, date,
     catch (error) {
       console.error('Error generating or downloading PDF:', error);
     }
+    try {
+      await setCustShipItemBillDetails();
+    }
+    catch (error) {
+      throw new Error('Error from setCustShipItemBillDetails');
+    }
   };
   const DownloadPdf = () => {
     return <StyledButton onClick={downloadPdfDocument}>Download PDF</StyledButton>
   }
   return (
     <div>
-      <h1>Pdf report</h1>
       <DownloadPdf />
+      {/*  
+            <h1>Pdf report</h1>
+     
       <PDFViewer style={{ width: '100%', height: '100vh' }}>
         <Document>
           {itemsInPiecesList.map((itemsInPieces, index) => (
@@ -358,6 +386,7 @@ const PdfReportData = ({ items, customerDetails, date,
           ))}
         </Document>
       </PDFViewer>
+       */}
     </div >
   );
 };
