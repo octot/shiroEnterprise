@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { createTheme, ThemeProvider, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Container, Typography, Button, TextField, Box } from '@mui/material';
 import './TableStyles.css';
 function ExistingCustomerDetails() {
-  const URl='https://shiroenterprise.onrender.com'
+  const URl='https://shiroenterprise.onrender.com/api'
   // const URl='http://localhost:3001/api'
   const [customers, setCustomers] = useState([]);
   const [editId, setEditId] = useState(null);
@@ -38,7 +38,7 @@ function ExistingCustomerDetails() {
     });
   };
   const handleSaveClick = async (id) => {
-    const response = await fetch(`${URI}/editExistingCustomerDetails/${id}`, {
+    const response = await fetch(`${URl}/editExistingCustomerDetails/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'

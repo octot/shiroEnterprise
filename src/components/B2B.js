@@ -6,7 +6,7 @@ import ItemsTable from './ItemsTable';
 import { styled } from '@mui/system';
 import '../componentStyles/B2B.css'
 function B2B() {
-  const URl = 'https://shiroenterprise.onrender.com'
+  const URl = 'https://shiroenterprise.onrender.com/api'
   // const URl='http://localhost:3001/api'
   const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
   const [customers, setCustomers] = useState([]);

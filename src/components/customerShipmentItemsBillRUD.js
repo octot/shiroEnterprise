@@ -7,7 +7,7 @@ import {
 import { ToastContainer, toast } from 'react-toastify';
 
 const CustomerShipmentItemsBillRUD = () => {
-    const URl = 'https://shiroenterprise.onrender.com'
+    const URl = 'https://shiroenterprise.onrender.com/api'
     // const URl='http://localhost:3001/api'
 
     const [existingCustomerShipmentItemsBillRUD, setExistingCustomerShipmentItemsBillRUD] = useState([]);

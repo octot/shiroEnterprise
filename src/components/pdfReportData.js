@@ -9,7 +9,7 @@ import { Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 const PdfReportData = ({ items, customerDetails, date,
   shipmentDetails, gstTotalValues, billNo }) => {
-  const URl = 'https://shiroenterprise.onrender.com'
+  const URl = 'https://shiroenterprise.onrender.com/api'
   // const URl='http://localhost:3001/api'
   const StyledButton = styled(Button)({
     backgroundColor: '#4caf50',
