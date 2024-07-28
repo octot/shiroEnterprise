@@ -7,13 +7,16 @@ import {
 import { ToastContainer, toast } from 'react-toastify';
 
 const CustomerShipmentItemsBillRUD = () => {
+    const URl = 'https://shiroenterprise.onrender.com'
+    // const URl='http://localhost:3001/api'
+
     const [existingCustomerShipmentItemsBillRUD, setExistingCustomerShipmentItemsBillRUD] = useState([]);
     const [searchBillNumber, setSearchBillNumber] = useState('')
     const [selectCheckBoxes, setSelectCheckBoxes] = useState([])
     const [checked, setChecked] = useState(false);
     useEffect(() => {
         const fetchCustomerShipmentItemsBillRUD = async () => {
-            const response = await fetch('http://localhost:3001/api/getCustShipItemBillDetails');
+            const response = await fetch(`${URl}/getCustShipItemBillDetails`);
             const data = await response.json();
             setExistingCustomerShipmentItemsBillRUD(data);
         };
@@ -30,7 +33,7 @@ const CustomerShipmentItemsBillRUD = () => {
         )
     console.log("filterBasedOnBillNumber ", filterBasedOnBillNumber)
     const handleDeleteClick = async (id) => {
-        const response = await fetch(`http://localhost:3001/api/deleteCustShipItemBillDetails/${id}`, {
+        const response = await fetch(`${URl}/deleteCustShipItemBillDetails/${id}`, {
             method: 'DELETE'
         });
 

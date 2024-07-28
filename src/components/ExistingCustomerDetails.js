@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { createTheme, ThemeProvider, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Container, Typography, Button, TextField, Box } from '@mui/material';
 import './TableStyles.css';
 function ExistingCustomerDetails() {
+  const URl='https://shiroenterprise.onrender.com'
+  // const URl='http://localhost:3001/api'
   const [customers, setCustomers] = useState([]);
   const [editId, setEditId] = useState(null);
   const [editFormData, setEditFormData] = useState({
@@ -13,7 +15,7 @@ function ExistingCustomerDetails() {
   const [search, setSearch] = useState('');
   useEffect(() => {
     const fetchCustomers = async () => {
-      const response = await fetch('http://localhost:3001/api/getExistingCustomerDetails');
+      const response = await fetch(`${URl}/getExistingCustomerDetails`);
       const data = await response.json();
       setCustomers(data);
     };
@@ -36,7 +38,7 @@ function ExistingCustomerDetails() {
     });
   };
   const handleSaveClick = async (id) => {
-    const response = await fetch(`http://localhost:3001/api/editExistingCustomerDetails/${id}`, {
+    const response = await fetch(`${URI}/editExistingCustomerDetails/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -55,7 +57,7 @@ function ExistingCustomerDetails() {
     }
   };
   const handleDeleteClick = async (id) => {
-    const response = await fetch(`http://localhost:3001/api/deleteExistingCustomerDetails/${id}`, {
+    const response = await fetch(`${URl}/deleteExistingCustomerDetails/${id}`, {
       method: 'DELETE'
     });
 

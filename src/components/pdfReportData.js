@@ -9,6 +9,8 @@ import { Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 const PdfReportData = ({ items, customerDetails, date,
   shipmentDetails, gstTotalValues, billNo }) => {
+  const URl = 'https://shiroenterprise.onrender.com'
+  // const URl='http://localhost:3001/api'
   const StyledButton = styled(Button)({
     backgroundColor: '#4caf50',
     color: '#fff',
@@ -72,7 +74,7 @@ const PdfReportData = ({ items, customerDetails, date,
 
   const setCustShipItemBillDetails = async () => {
     try {
-      const custShipItemBillDetailsData = await fetch('http://localhost:3001/api/setCustShipItemBillDetails', {
+      const custShipItemBillDetailsData = await fetch(`${URl}/setCustShipItemBillDetails`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -87,7 +89,7 @@ const PdfReportData = ({ items, customerDetails, date,
   };
   const generateBillNumber = async () => {
     try {
-      const responseOfGeneratedBillNumber = await fetch('http://localhost:3001/api/nextBillNumber');
+      const responseOfGeneratedBillNumber = await fetch(`${URl}/nextBillNumber`);
       if (!responseOfGeneratedBillNumber.ok) {
         throw new Error("Could not generateBillNumber")
       }

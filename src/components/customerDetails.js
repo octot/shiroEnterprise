@@ -16,6 +16,8 @@ const ResponsiveTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 const CustomerForm = () => {
+  const URl = 'https://shiroenterprise.onrender.com'
+  // const URl='http://localhost:3001/api'
   const [formData, setFormData] = useState({
     name: '',
     address: '',
@@ -31,7 +33,7 @@ const CustomerForm = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch('http://localhost:3001/api/customers', {
+    const response = await fetch(`${URl}/customers`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

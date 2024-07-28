@@ -6,6 +6,8 @@ import ItemsTable from './ItemsTable';
 import { styled } from '@mui/system';
 import '../componentStyles/B2B.css'
 function B2B() {
+  const URl = 'https://shiroenterprise.onrender.com'
+  // const URl='http://localhost:3001/api'
   const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
   const [customers, setCustomers] = useState([]);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
@@ -17,7 +19,7 @@ function B2B() {
   });
   useEffect(() => {
     // Fetch existing customer details
-    axios.get('http://localhost:3001/api/getExistingCustomerDetails')
+    axios.get(`${URl}/getExistingCustomerDetails`)
       .then(response => {
         setCustomers(response.data);
       })
